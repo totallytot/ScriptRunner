@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.onresolve</groupId>
+    <artifactId>scripts-repository</artifactId>
+    <version>1.0</version>
+
+    <organization>
+        <name>Adaptavist.com Ltd</name>
+        <url>http://www.adaptavist.com/</url>
+    </organization>
+
+    <repositories>
+        <repository>
+            <id>adaptavist.public</id>
+            <url>https://nexus.adaptavist.com/content/repositories/external/</url>
+        </repository>
+    </repositories>
+
+    <name>scripts-repository</name>
+    <description>This is a container to store ScriptRunner scripts</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-core</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.bitbucket.server</groupId>
+            <artifactId>bitbucket-api</artifactId>
+            <version>${bitbucket.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.onresolve.jira.groovy</groupId>
+            <artifactId>groovyrunner</artifactId>
+            <version>${scriptrunner.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.onresolve.confluence.groovy</groupId>
+            <artifactId>groovyrunner</artifactId>
+            <version>${scriptrunner.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.onresolve.stash.groovy</groupId>
+            <artifactId>groovyrunner</artifactId>
+            <version>${scriptrunner.version}</version>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <jira.version>7.0.0</jira.version>
+        <bitbucket.version>4.2.0</bitbucket.version>
+        <amps.version>6.2.1</amps.version>
+        <groovy.version>2.4.3</groovy.version>
+        <scriptrunner.version>4.3.4</scriptrunner.version>
+    </properties>
+</project>
