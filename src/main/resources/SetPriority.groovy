@@ -1,9 +1,13 @@
+//Script Location: Post-function
+//Sets issue priority depending on story points
+
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.CustomFieldManager
 import com.atlassian.jira.issue.fields.CustomField
 
 CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager()
-CustomField storyPointsField = customFieldManager.getCustomFieldObject(10307L)
+CustomField storyPointsField = customFieldManager.getCustomFieldObject(10307L) //story point field
 
 String sp = issue.getCustomFieldValue(storyPointsField)
 
