@@ -49,13 +49,13 @@ for (LazyLoadedOption option : values) {
         Map<String, ProjectComponent> sourceComponentsMap = new HashMap<>()
         for (ProjectComponent projectComponent : sourceComponents) sourceComponentsMap.put(projectComponent.getName(), projectComponent)
 
+        ArrayList<ProjectComponent> tList = new ArrayList<>()
         for (Map.Entry<String, ProjectComponent> entry : sourceComponentsMap.entrySet()) {
             if (targetComponetsMap.containsKey(entry.getKey())) {
-                ArrayList<ProjectComponent> tList = new ArrayList<>()
                 tList.add(targetComponetsMap.get(entry.getKey()))
-                clone.setComponent(tList)
             }
         }
+        clone.setComponent(tList)
     }
     //put issue to DB
     Issue clonedIssue = issueManager.createIssueObject(applicationUser, clone)
