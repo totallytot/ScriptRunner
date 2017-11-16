@@ -1,3 +1,5 @@
+//script checks specified groups, removes them from project roles and sends the report
+
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
