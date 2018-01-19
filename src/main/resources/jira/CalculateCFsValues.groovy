@@ -1,3 +1,4 @@
+package jira
 //Script Location: Sript Field
 //Searcher: Number Searcher
 //Template: Number Field

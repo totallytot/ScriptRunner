@@ -1,3 +1,4 @@
+package jira
 //Script Location: Post-function
 //Sets issue priority depending on story points
 
