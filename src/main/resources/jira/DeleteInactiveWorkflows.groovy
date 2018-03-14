@@ -2,7 +2,7 @@ package jira
 
 //system default workflow should in some scheme
 
-import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.workflow.JiraWorkflow;
 import com.atlassian.jira.workflow.WorkflowManager;
 import com.atlassian.jira.workflow.WorkflowSchemeManager;
