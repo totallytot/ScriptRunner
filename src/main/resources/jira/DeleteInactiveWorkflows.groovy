@@ -12,7 +12,7 @@ WorkflowSchemeManager workflowSchemeManager = ComponentAccessor.getWorkflowSchem
 StringBuilder report = new StringBuilder();
 
 Collection<JiraWorkflow> workflows = workflowManager.getWorkflows();
-workflows.removeAll( workflowManager.getActiveWorkflows());
+workflows.removeAll(workflowManager.getActiveWorkflows());
 
 workflows.each {
     if (workflowSchemeManager.getSchemesForWorkflow(it).size() == 0) {
