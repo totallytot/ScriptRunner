@@ -1,7 +1,7 @@
 package jira
 
-import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.issue.fields.screen.issuetype.IssueTypeScreenScheme
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.fields.screen.issuetype.IssueTypeScreenScheme;
 import com.atlassian.jira.issue.fields.screen.issuetype.IssueTypeScreenSchemeManager;
 
 IssueTypeScreenSchemeManager issueTypeScreenSchemeManager = ComponentAccessor.getIssueTypeScreenSchemeManager();
@@ -16,7 +16,7 @@ schemes.each {
         issueTypeScreenSchemeManager.removeIssueTypeScreenScheme(it);
     }
 }
-//issueTypeScreenSchemeManager.refresh();
+
 return report.toString();
 
 

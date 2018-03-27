@@ -1,8 +1,8 @@
 package jira
 
-import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.issue.fields.config.FieldConfigScheme
-import com.atlassian.jira.issue.fields.config.manager.IssueTypeSchemeManager
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.fields.config.FieldConfigScheme;
+import com.atlassian.jira.issue.fields.config.manager.IssueTypeSchemeManager;
 
 IssueTypeSchemeManager issueTypeSchemeManager = ComponentAccessor.getIssueTypeSchemeManager();
 List<FieldConfigScheme> fieldConfigSchemes = issueTypeSchemeManager.getAllSchemes();

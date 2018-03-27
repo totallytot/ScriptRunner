@@ -9,16 +9,14 @@ FieldScreenSchemeManager fieldScreenSchemeManager = ComponentAccessor.getCompone
 IssueTypeScreenSchemeManager issueTypeScreenSchemeManager = ComponentAccessor.getIssueTypeScreenSchemeManager();
 
 StringBuilder report = new StringBuilder();
-
 Collection<FieldScreenScheme> fieldScreenSchemes = fieldScreenSchemeManager.getFieldScreenSchemes();
 
 fieldScreenSchemes.each {
-
     if (issueTypeScreenSchemeManager.getIssueTypeScreenSchemes(it).size() == 0) {
         report.append(it.getName());
-        report.append(" | ")
+        report.append(" | ");
+        fieldScreenSchemeManager.removeFieldSchemeItems(it);
         fieldScreenSchemeManager.removeFieldScreenScheme(it);
-
     }
 }
 return report.toString();
