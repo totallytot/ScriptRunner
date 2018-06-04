@@ -1,4 +1,4 @@
-package jira
+package jira.scriptconsole
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.fields.screen.issuetype.IssueTypeScreenScheme;

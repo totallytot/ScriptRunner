@@ -1,4 +1,4 @@
-package jira
+package jira.scriptconsole
 
 /*
 MutableIssue is facade for an issue's GenericValue.

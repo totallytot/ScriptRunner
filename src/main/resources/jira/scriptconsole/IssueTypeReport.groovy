@@ -1,4 +1,4 @@
-package jira
+package jira.scriptconsole
 //Put to Administration -> Ad-dons -> Script Console.
 
 import com.atlassian.jira.component.ComponentAccessor;

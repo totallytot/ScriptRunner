@@ -1,4 +1,4 @@
-package jira
+package jira.scriptconsole
 
 //system default workflow should in some scheme
 
