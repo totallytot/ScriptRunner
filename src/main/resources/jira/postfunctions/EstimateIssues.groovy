@@ -1,4 +1,4 @@
-package jira
+package jira.postfunctions
 ////Script Location: Post-function
 
 import com.atlassian.jira.component.ComponentAccessor

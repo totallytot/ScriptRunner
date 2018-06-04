@@ -1,4 +1,4 @@
-package jira
+package jira.postfunctions
 //script for post-function was used in JIRA 7.5
 //checks cf of checkbox type, if there are checked values that are equal to project keys - clones issue to this projects with cfs values,
 //sets components if they are the same on source-target projects, and makes issue link "Cloners"
