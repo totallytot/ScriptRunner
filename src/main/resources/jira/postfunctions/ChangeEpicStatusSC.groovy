@@ -1,0 +1,55 @@
+package jira.postfunctions
+
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.issue.CustomFieldManager;
+import com.atlassian.jira.issue.IssueManager;
+import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.security.JiraAuthenticationContext;
+import com.atlassian.jira.user.ApplicationUser;
+import com.atlassian.jira.util.JiraUtils;
+import com.atlassian.jira.workflow.WorkflowTransitionUtil;
+import com.atlassian.jira.workflow.WorkflowTransitionUtilImpl;
+
+//for testing in order to catch the user
+String user = "ext_alexk";
+ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
+JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
+jiraAuthenticationContext.setLoggedInUser(applicationUser);
+
+//for testing in order to catch the issue
+IssueManager issueManager = ComponentAccessor.getIssueManager();
+Issue issue = issueManager.getIssueObject("INFRA-26567");
+
+CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
+WorkflowTransitionUtil workflowTransitionUtil = (WorkflowTransitionUtil) JiraUtils.loadComponent(WorkflowTransitionUtilImpl.class);
+
+if (issue.getIssueType().getName().equals("Story")) {
+
+    CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
+    String epicKey =  issue.getCustomFieldValue(epicLink).toString();
+    MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
+
+    String originalEpicStatus = issueEpic.getStatus().getSimpleStatus().getName();
+
+    if (originalEpicStatus.equals("To Do")) {
+        String oldSummary = issueEpic.summary;
+        String assignee = user;
+        String reporter = issueEpic.getReporter().getKey();
+        def params = ["summary": oldSummary, "assignee": assignee, "reporter": reporter];
+
+        workflowTransitionUtil.setParams(params);
+        workflowTransitionUtil.setIssue(issueEpic);
+
+        if (issueEpic.getAssignee() == null) {
+            workflowTransitionUtil.setUserkey(user);
+        }
+
+        workflowTransitionUtil.setAction(51);
+
+        if (workflowTransitionUtil.validate()) {
+            workflowTransitionUtil.progress();
+        }
+    }
+}
