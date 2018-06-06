@@ -14,16 +14,16 @@ if (issue.getIssueType().getName().equals("Epic")) {
     JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
     ApplicationUser applicationUser = jiraAuthenticationContext.getLoggedInUser();
 
-//get link to Feature
+    //get link to Feature
     IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
     List<IssueLink> epicLinks = issueLinkManager.getInwardLinks(issue.getId());
 
-//get Feature
+    //get Feature
     Issue issueFeature = null;
-
     epicLinks.each {
         if (it.getSourceObject().getIssueType().getName().equals("Roadmap Feature")) {
             issueFeature = it.getSourceObject();
+            return true;
         }
     }
 
@@ -31,13 +31,12 @@ if (issue.getIssueType().getName().equals("Epic")) {
         IssueService issueService = ComponentAccessor.getIssueService();
         IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-        if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.toString())
+        if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
 
         IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
         if (transitionValidationResult.isValid()) {
             IssueService.IssueResult transitionResult = issueService.transition(applicationUser, transitionValidationResult);
 
-            return transitionResult.errorCollection.errorMessages.each {}
         }
     }
 }
