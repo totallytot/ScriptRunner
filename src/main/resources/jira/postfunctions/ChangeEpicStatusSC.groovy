@@ -25,27 +25,27 @@ Issue issue = issueManager.getIssueObject("INFRA-26567");
 CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
 WorkflowTransitionUtil workflowTransitionUtil = (WorkflowTransitionUtil) JiraUtils.loadComponent(WorkflowTransitionUtilImpl.class);
 
-if (issue.getIssueType().getName().equals("Story")) {
+CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
+String epicKey =  issue.getCustomFieldValue(epicLink).toString();
+MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
 
-    CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
-    String epicKey =  issue.getCustomFieldValue(epicLink).toString();
-    MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
+if (issueEpic != null) {
 
     String originalEpicStatus = issueEpic.getStatus().getSimpleStatus().getName();
 
     if (originalEpicStatus.equals("To Do")) {
-        String oldSummary = issueEpic.summary;
-        String assignee = user;
-        String reporter = issueEpic.getReporter().getKey();
-        def params = ["summary": oldSummary, "assignee": assignee, "reporter": reporter];
+
+        Map<String, String> params = new HashMap<>();
+        params.put("summary", issueEpic.summary);
+        params.put("reporter", issueEpic.getReporter().getKey());
+
+        if (issueEpic.getAssignee() == null) {
+            params.put("assignee", user);
+        }
 
         workflowTransitionUtil.setParams(params);
         workflowTransitionUtil.setIssue(issueEpic);
-
-        if (issueEpic.getAssignee() == null) {
-            workflowTransitionUtil.setUserkey(user);
-        }
-
+        workflowTransitionUtil.setUserkey(user);
         workflowTransitionUtil.setAction(51);
 
         if (workflowTransitionUtil.validate()) {
