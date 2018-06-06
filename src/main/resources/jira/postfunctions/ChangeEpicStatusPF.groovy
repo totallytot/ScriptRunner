@@ -17,32 +17,33 @@ WorkflowTransitionUtil workflowTransitionUtil = (WorkflowTransitionUtil) JiraUti
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
 ApplicationUser applicationUser = jiraAuthenticationContext.getLoggedInUser();
 
-if (issue.getIssueType().getName().equals("Story")) { //move upper
+CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
+String epicKey =  issue.getCustomFieldValue(epicLink).toString();
 
-    CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
-    String epicKey =  issue.getCustomFieldValue(epicLink).toString();
+IssueManager issueManager = ComponentAccessor.getIssueManager();
+MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
 
-    IssueManager issueManager = ComponentAccessor.getIssueManager();
-    MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
+if (issueEpic != null) {
 
     String originalEpicStatus = issueEpic.getStatus().getSimpleStatus().getName();
 
     if (originalEpicStatus.equals("To Do")) {
-        String oldSummary = issueEpic.summary;
-        String reporter = issueEpic.getReporter().getKey();
-        def params = ["summary":oldSummary, "assignee":applicationUser.getKey(), "reporter":reporter];
+
+        Map<String, String> params = new HashMap<>();
+        params.put("summary", issueEpic.summary);
+        params.put("reporter", issueEpic.getReporter().getKey());
+
+        if (issueEpic.getAssignee() == null) {
+            params.put("assignee", applicationUser.getKey());
+        }
 
         workflowTransitionUtil.setParams(params);
         workflowTransitionUtil.setIssue(issueEpic);
-
-        if (issueEpic.getAssignee() == null) {
-            workflowTransitionUtil.setUserkey(applicationUser.getKey())
-        }
-
+        workflowTransitionUtil.setUserkey(applicationUser.getKey());
         workflowTransitionUtil.setAction(51);
 
         if (workflowTransitionUtil.validate()) {
-            workflowTransitionUtil.progress()
+            workflowTransitionUtil.progress();
         }
     }
 }
