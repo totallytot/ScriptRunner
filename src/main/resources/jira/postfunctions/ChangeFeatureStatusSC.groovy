@@ -21,7 +21,7 @@ jiraAuthenticationContext.setLoggedInUser(applicationUser);
 IssueManager issueManager = ComponentAccessor.getIssueManager();
 
 //get EPIC
-MutableIssue issue = issueManager.getIssueObject("INFRA-26765");
+MutableIssue issue = issueManager.getIssueObject("INFRA-26786");
 
 //get link to Feature
 IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
@@ -29,10 +29,10 @@ List<IssueLink> epicLinks = issueLinkManager.getInwardLinks(issue.getId());
 
 //get Feature
 Issue issueFeature = null;
-
 epicLinks.each {
     if (it.getSourceObject().getIssueType().getName().equals("Roadmap Feature")) {
         issueFeature = it.getSourceObject();
+        return true;
     }
 }
 
@@ -40,14 +40,11 @@ if (issueFeature != null) {
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.toString())
+    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
 
     IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
     if (transitionValidationResult.isValid()) {
         IssueService.IssueResult transitionResult = issueService.transition(applicationUser, transitionValidationResult);
-
         return transitionResult.errorCollection.errorMessages.each {}
     }
-
 }
-
