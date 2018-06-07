@@ -32,7 +32,7 @@ issueLinkManager.getInwardLinks(issue.getId()).each {
 //transit parent issue
 boolean shouldtransitParent = true;
 
-if (parentIssue != null) {
+if (parentIssue != null && !parentIssue.getIssueType().getName().equals("Epic") && !parentIssue.getIssueType().getName().equals("Roadmap Feature")) {
 
     //check if there is any not closed sub-task
     int countNotClosed = 0;

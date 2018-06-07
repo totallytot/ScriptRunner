@@ -2,6 +2,7 @@ package jira.postfunctions
 
 /**
  * post function should be place after "Re-index an issue to keep indexes in sync with the database".
+ *
  */
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
@@ -25,12 +26,11 @@ issueLinkManager.getInwardLinks(issue.getId()).each {
     }
 }
 
-//transit parent issue
-boolean shouldtransitParent = true;
-
-if (parentIssue != null) {
+//transit parent issue except epic and feature
+if (parentIssue != null && !parentIssue.getIssueType().getName().equals("Epic") && !parentIssue.getIssueType().getName().equals("Roadmap Feature")) {
 
     //check if there is any not closed sub-task
+    boolean shouldtransitParent = true;
     int countNotClosed = 0;
     List<IssueLink> outwardLinks = issueLinkManager.getOutwardLinks(parentIssue.getId());
     outwardLinks.each {
