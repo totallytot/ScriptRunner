@@ -5,6 +5,7 @@ import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.IssueInputParameters
 import com.atlassian.jira.issue.IssueManager
 import com.atlassian.jira.issue.MutableIssue
+import com.atlassian.jira.issue.link.IssueLink
 import com.atlassian.jira.issue.link.IssueLinkManager
 import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
@@ -29,19 +30,20 @@ issueLinkManager.getInwardLinks(issue.getId()).each {
 }
 
 //transit parent issue
-boolean shouldtransitParent = false;
+boolean shouldtransitParent = true;
 
 if (parentIssue != null) {
 
-    //check if all sub-tasks are in done status
-    int count = 0;
-    issueLinkManager.getOutwardLinks(parentIssue.getId()).each {
-        if (it.getDestinationObject().getStatus().getName().equals("Done")) {
-            count++;
+    //check if there is any not closed sub-task
+    int countNotClosed = 0;
+    List<IssueLink> outwardLinks = issueLinkManager.getOutwardLinks(parentIssue.getId());
+    outwardLinks.each {
+        if (it.getIssueLinkType().getId() == 10100 && !it.getDestinationObject().getStatus().getStatusCategory().getName().equals("Complete")) {
+            countNotClosed++;
         }
     }
 
-    if (issueLinkManager.getOutwardLinks(parentIssue.getId()).size() == count /*+ 1*/) shouldtransitParent = true;
+    if (countNotClosed > 0) shouldtransitParent = false;
 
     if (shouldtransitParent) {
         IssueService issueService = ComponentAccessor.getIssueService();
@@ -55,11 +57,14 @@ if (parentIssue != null) {
             case "Bug":
             case "Task":
             case "Technical Debt":
-            //case "Story":
-                transitionId = 101; //61
+                transitionId = 101;
                 break;
             case "Production Issue":
+            case "Story":
                 transitionId = 61;
+                break;
+            case "Framework":
+                transitionId = 21;
                 break;
         }
 
@@ -70,4 +75,3 @@ if (parentIssue != null) {
         }
     }
 }
-

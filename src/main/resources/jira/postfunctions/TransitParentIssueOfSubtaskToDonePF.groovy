@@ -1,5 +1,8 @@
 package jira.postfunctions
 
+/**
+ * post function should be place after "Re-index an issue to keep indexes in sync with the database".
+ */
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.IssueInputParameters
@@ -31,12 +34,12 @@ if (parentIssue != null) {
     int countNotClosed = 0;
     List<IssueLink> outwardLinks = issueLinkManager.getOutwardLinks(parentIssue.getId());
     outwardLinks.each {
-        if (!(it.getDestinationObject().getStatus().getName().equals("Done") || it.getDestinationObject().getStatus().getName().equals("Verified (Prod)") && it.getLinkTypeId() == 10100)) {
+        if (it.getIssueLinkType().getId() == 10100 && !it.getDestinationObject().getStatus().getStatusCategory().getName().equals("Complete")) {
             countNotClosed++;
         }
     }
 
-    if (countNotClosed > 1) shouldtransitParent = false;
+    if (countNotClosed > 0) shouldtransitParent = false;
 
     if (shouldtransitParent) {
         IssueService issueService = ComponentAccessor.getIssueService();
