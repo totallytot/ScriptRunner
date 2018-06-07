@@ -46,7 +46,7 @@ if (issue.getIssueType().getName().equals("Epic")) {
             IssueService issueService = ComponentAccessor.getIssueService();
             IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-            if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.toString())
+            if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey())
 
             IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 61, issueInputParameters);
             if (transitionValidationResult.isValid()) {
