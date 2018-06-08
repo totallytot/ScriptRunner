@@ -1,7 +1,7 @@
 package jira.postfunctions
 
 /**
- * post function should be place after "Re-index an issue to keep indexes in sync with the database".
+ * post function should be place after "Re-index an issue to keep indexes in sync with the database"
  *
  */
 

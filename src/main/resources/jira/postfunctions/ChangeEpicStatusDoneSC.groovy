@@ -13,7 +13,7 @@ import com.atlassian.jira.util.JiraUtils
 import com.atlassian.jira.workflow.WorkflowTransitionUtil
 import com.atlassian.jira.workflow.WorkflowTransitionUtilImpl;
 
-//for testing in order to catch the user
+// for testing in order to catch the user
 String user = "ext_alexk";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
