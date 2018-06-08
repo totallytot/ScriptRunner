@@ -21,52 +21,50 @@ jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
-Issue issue = issueManager.getIssueObject("INFRA-26567");
+Issue issue = issueManager.getIssueObject("INFRA-26788");
 
 CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
 WorkflowTransitionUtil workflowTransitionUtil = (WorkflowTransitionUtil) JiraUtils.loadComponent(WorkflowTransitionUtilImpl.class);
-//use ComponentManager.loadComponent(Class, Collection)
 
-if (issue.getIssueType().getName().equals("Story")) {
+CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
+String epicKey =  issue.getCustomFieldValue(epicLink).toString();
+MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
+String originalEpicStatus = issueEpic.getStatus().getSimpleStatus().getName();
 
-    CustomField epicLink = customFieldManager.getCustomFieldObject(10200L);
-    String epicKey =  issue.getCustomFieldValue(epicLink).toString();
-    MutableIssue issueEpic = issueManager.getIssueObject(epicKey);
+if (originalEpicStatus.equals("In Progress") || originalEpicStatus.equals("To Do")){
+    boolean shouldChangeEpic = true;
+    IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
 
-    String originalEpicStatus = issueEpic.getStatus().getSimpleStatus().getName();
+    int countNotClosed = 0;
 
-    if (originalEpicStatus.equals("In Progress") || originalEpicStatus.equals("To Do")){
-
-        boolean shouldChangeEpic = false;
-        IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
-
-        int count = 0;
-
-        issueLinkManager.getOutwardLinks(issueEpic.getId()).each{
-            if (it.getDestinationObject().getStatus().getName().equals("Done")) {
-                count++;
-            }
+    issueLinkManager.getOutwardLinks(issueEpic.getId()).each{
+        if (!it.getDestinationObject().getStatus().getStatusCategory().getName().equals("Complete") && it.getIssueLinkType().getId() != 10100) {
+            countNotClosed++;
         }
-
-        if (issueLinkManager.getOutwardLinks(issueEpic.getId()).size() == count+1) shouldChangeEpic = true;
-
-        if (shouldChangeEpic) {
-
-            String oldSummary = issueEpic.summary;
-            String assignee = user;
-            String reporter = issueEpic.getReporter().getKey();
-            def params = ["summary": oldSummary, "assignee": assignee, "reporter": reporter];
-
-            workflowTransitionUtil.setParams(params);
-            workflowTransitionUtil.setIssue(issueEpic);
-            workflowTransitionUtil.setUserkey(user);
-            workflowTransitionUtil.setAction(61);
-
-            if (workflowTransitionUtil.validate()) {
-                workflowTransitionUtil.progress()
-            }
-        }
-        return shouldChangeEpic;
     }
+
+    if (countNotClosed > 0) shouldChangeEpic = false;
+
+    if (shouldChangeEpic) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("summary", issueEpic.summary);
+        params.put("reporter", issueEpic.getReporter().getKey());
+
+        if (issueEpic.getAssignee() == null) {
+            params.put("assignee", applicationUser.getKey());
+        }
+
+        workflowTransitionUtil.setParams(params);
+        workflowTransitionUtil.setIssue(issueEpic);
+        workflowTransitionUtil.setUserkey(applicationUser.getKey());
+        workflowTransitionUtil.setAction(61);
+
+        if (workflowTransitionUtil.validate()) {
+            workflowTransitionUtil.progress();
+        }
+    }
+        return shouldChangeEpic;
 }
+
 
