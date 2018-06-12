@@ -37,7 +37,6 @@ groups.each{
 
     keys.each{ k, v ->
         if(oneGroup.equals(k)){
-
             value = ComponentAccessor.optionsManager.getOptions(fieldConfig)?.find { it.toString() == v}
             bp_team.updateValue(null, underlyingIssue, new ModifiedValue(null, value), new DefaultIssueChangeHolder())
             return
