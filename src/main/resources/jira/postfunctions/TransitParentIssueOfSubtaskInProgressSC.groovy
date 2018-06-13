@@ -9,14 +9,14 @@ import com.atlassian.jira.issue.link.IssueLinkManager
 import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
 
-String user = "ext_alexk";
+String user = "user";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
 jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
-MutableIssue issue = issueManager.getIssueObject("INFRA-26790");
+MutableIssue issue = issueManager.getIssueObject("TEST-26790");
 
 //take parent issue instead of sub-task and transit it
 MutableIssue parentIssue;

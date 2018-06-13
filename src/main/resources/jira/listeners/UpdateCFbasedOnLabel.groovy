@@ -1,6 +1,5 @@
 package jira.listeners
 
-import com.atlassian.jira.issue.MutableIssue
 import com.atlassian.jira.issue.label.Label
 import com.atlassian.jira.issue.ModifiedValue
 import com.atlassian.jira.issue.customfields.option.Option
@@ -13,14 +12,14 @@ import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
 
-String user = "ext_alexk";
+String user = "user";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
 jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
-Issue issue = issueManager.getIssueObject("INFRA-26807");
+Issue issue = issueManager.getIssueObject("TEST-26807");
 
 
 //MutableIssue issue = (MutableIssue) event.getIssue();

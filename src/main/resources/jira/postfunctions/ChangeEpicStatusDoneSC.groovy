@@ -14,14 +14,14 @@ import com.atlassian.jira.workflow.WorkflowTransitionUtil
 import com.atlassian.jira.workflow.WorkflowTransitionUtilImpl;
 
 // for testing in order to catch the user
-String user = "ext_alexk";
+String user = "user";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
 jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
-Issue issue = issueManager.getIssueObject("INFRA-26788");
+Issue issue = issueManager.getIssueObject("TEST-26788");
 
 CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
 WorkflowTransitionUtil workflowTransitionUtil = (WorkflowTransitionUtil) JiraUtils.loadComponent(WorkflowTransitionUtilImpl.class);

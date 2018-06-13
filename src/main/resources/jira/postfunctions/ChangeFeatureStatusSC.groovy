@@ -12,7 +12,7 @@ import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
 
 //for testing in order to catch the user
-String user = "ext_alexk";
+String user = "user";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
 jiraAuthenticationContext.setLoggedInUser(applicationUser);
@@ -21,7 +21,7 @@ jiraAuthenticationContext.setLoggedInUser(applicationUser);
 IssueManager issueManager = ComponentAccessor.getIssueManager();
 
 //get EPIC
-MutableIssue issue = issueManager.getIssueObject("INFRA-26786");
+MutableIssue issue = issueManager.getIssueObject("TEST-26786");
 
 //get link to Feature
 IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();

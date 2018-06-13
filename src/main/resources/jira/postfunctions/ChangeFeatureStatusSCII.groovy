@@ -13,12 +13,12 @@ import com.atlassian.jira.user.ApplicationUser
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
-MutableIssue issue = issueManager.getIssueObject("INFRA-26765");
+MutableIssue issue = issueManager.getIssueObject("TEST-26765");
 
 if (issue.getIssueType().getName().equals("Epic")) {
 
 //for testing in order to catch the user
-    String user = "ext_alexk";
+    String user = "user";
     ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
     JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
     jiraAuthenticationContext.setLoggedInUser(applicationUser);
