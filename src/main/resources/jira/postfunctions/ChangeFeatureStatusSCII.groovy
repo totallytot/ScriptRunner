@@ -32,24 +32,26 @@ if (issue.getIssueType().getName().equals("Epic")) {
     epicLinks.each {
         if (it.getSourceObject().getIssueType().getName().equals("Roadmap Feature")) {
             issueFeature = it.getSourceObject();
+            changeFeature(issueFeature, applicationUser);
         }
     }
+}
 
-    if (issueFeature != null) {
+String changeFeature(Issue issueFeature, ApplicationUser applicationUser) {
 
         //get links from feature
-        List<IssueLink> featureLinks = issueLinkManager.getOutwardLinks(issueFeature.getId());
-        boolean shouldChangeFeature = false;
+        List<IssueLink> featureLinks = ComponentAccessor.getIssueLinkManager().getOutwardLinks(issueFeature.getId());
+        boolean shouldChangeFeature = true;
 
         int count = 0;
 
         featureLinks.each {
-            if (it.getDestinationObject().getStatus().getName().equals("Done")) {
+            if (it.getIssueLinkType().getId() != 10100 && !it.getDestinationObject().getStatus().getStatusCategory().getName().equals("Complete")) {
                 count++;
             }
         }
 
-        if (featureLinks.size() == count+1) shouldChangeFeature = true;
+        if (count > 0) shouldChangeFeature = false;
 
         if (shouldChangeFeature) {
             IssueService issueService = ComponentAccessor.getIssueService();
@@ -64,7 +66,6 @@ if (issue.getIssueType().getName().equals("Epic")) {
             }
         }
         return shouldChangeFeature
-    }
 }
 
 
