@@ -32,11 +32,11 @@ Issue issueFeature = null;
 epicLinks.each {
     if (it.getSourceObject().getIssueType().getName().equals("Roadmap Feature")) {
         issueFeature = it.getSourceObject();
-        return true;
+        transitFeature(issueFeature, applicationUser);
     }
 }
 
-if (issueFeature != null) {
+static Collection<String> transitFeature(Issue issueFeature, ApplicationUser applicationUser) {
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
@@ -45,6 +45,13 @@ if (issueFeature != null) {
     IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
     if (transitionValidationResult.isValid()) {
         IssueService.IssueResult transitionResult = issueService.transition(applicationUser, transitionValidationResult);
-        return transitionResult.errorCollection.errorMessages.each {}
+        return transitionResult.errorCollection.errorMessages;
     }
+    return null;
 }
+
+
+
+
+
+
