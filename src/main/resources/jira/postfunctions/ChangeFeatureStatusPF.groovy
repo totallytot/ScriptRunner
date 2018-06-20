@@ -23,20 +23,20 @@ if (issue.getIssueType().getName().equals("Epic")) {
     epicLinks.each {
         if (it.getSourceObject().getIssueType().getName().equals("Roadmap Feature")) {
             issueFeature = it.getSourceObject();
-            return true;
+            transitFeature(issueFeature, applicationUser);
         }
     }
 
-    if (issueFeature != null) {
-        IssueService issueService = ComponentAccessor.getIssueService();
-        IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
+}
 
-        if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
+static void transitFeature(Issue issueFeature, ApplicationUser applicationUser) {
+    IssueService issueService = ComponentAccessor.getIssueService();
+    IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-        IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
-        if (transitionValidationResult.isValid()) {
-            IssueService.IssueResult transitionResult = issueService.transition(applicationUser, transitionValidationResult);
+    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
 
-        }
+    IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
+    if (transitionValidationResult.isValid()) {
+        IssueService.IssueResult transitionResult = issueService.transition(applicationUser, transitionValidationResult);
     }
 }
