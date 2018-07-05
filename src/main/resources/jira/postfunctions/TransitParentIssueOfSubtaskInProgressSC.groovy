@@ -6,17 +6,14 @@ import com.atlassian.jira.issue.IssueInputParameters
 import com.atlassian.jira.issue.IssueManager
 import com.atlassian.jira.issue.MutableIssue
 import com.atlassian.jira.issue.link.IssueLinkManager
-import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
 
-String user = "user";
+String user = "tech_user";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
-JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
-jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
-MutableIssue issue = issueManager.getIssueObject("TEST-26790");
+MutableIssue issue = issueManager.getIssueObject("TEST-26848");
 
 //take parent issue instead of sub-task and transit it
 MutableIssue parentIssue;
@@ -32,7 +29,7 @@ issueLinkManager.getInwardLinks(issue.getId()).each {
 if (parentIssue != null) {
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
-    if (parentIssue.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
+    if (parentIssue.getAssignee() == null) issueInputParameters.setAssigneeId(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser().getKey());
 
     String parentIssueType = parentIssue.getIssueType().getName();
     int transitionId;
