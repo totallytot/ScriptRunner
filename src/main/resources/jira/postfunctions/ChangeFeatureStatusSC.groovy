@@ -8,14 +8,10 @@ import com.atlassian.jira.issue.IssueManager
 import com.atlassian.jira.issue.MutableIssue
 import com.atlassian.jira.issue.link.IssueLink
 import com.atlassian.jira.issue.link.IssueLinkManager
-import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
 
-//for testing in order to catch the user
-String user = "user";
+String user = "tech_user";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
-JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
-jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //for testing in order to catch the issue
 IssueManager issueManager = ComponentAccessor.getIssueManager();
@@ -40,7 +36,7 @@ static Collection<String> transitFeature(Issue issueFeature, ApplicationUser app
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
+    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser().getKey());
 
     IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
     if (transitionValidationResult.isValid()) {

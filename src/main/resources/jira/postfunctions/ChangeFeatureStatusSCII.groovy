@@ -17,11 +17,8 @@ MutableIssue issue = issueManager.getIssueObject("TEST-26765");
 
 if (issue.getIssueType().getName().equals("Epic")) {
 
-//for testing in order to catch the user
-    String user = "user";
+    String user = "tech_user";
     ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
-    JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
-    jiraAuthenticationContext.setLoggedInUser(applicationUser);
 
 //get links leading to Feature
     IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
@@ -57,7 +54,7 @@ String changeFeature(Issue issueFeature, ApplicationUser applicationUser) {
             IssueService issueService = ComponentAccessor.getIssueService();
             IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-            if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.toString())
+            if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser().getKey());
 
             IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 61, issueInputParameters);
             if (transitionValidationResult.isValid()) {

@@ -6,13 +6,12 @@ import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.IssueInputParameters
 import com.atlassian.jira.issue.link.IssueLink
 import com.atlassian.jira.issue.link.IssueLinkManager
-import com.atlassian.jira.security.JiraAuthenticationContext
 import com.atlassian.jira.user.ApplicationUser
 
 if (issue.getIssueType().getName().equals("Epic")) {
 
-    JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext();
-    ApplicationUser applicationUser = jiraAuthenticationContext.getLoggedInUser();
+    String user = "tech_user";
+    ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 
     //get link to Feature
     IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
@@ -26,14 +25,13 @@ if (issue.getIssueType().getName().equals("Epic")) {
             transitFeature(issueFeature, applicationUser);
         }
     }
-
 }
 
-static void transitFeature(Issue issueFeature, ApplicationUser applicationUser) {
+void transitFeature(Issue issueFeature, ApplicationUser applicationUser) {
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
 
-    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(applicationUser.getKey());
+    if (issueFeature.getAssignee() == null) issueInputParameters.setAssigneeId(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser().getKey());
 
     IssueService.TransitionValidationResult transitionValidationResult = issueService.validateTransition(applicationUser, issueFeature.getId(), 51, issueInputParameters);
     if (transitionValidationResult.isValid()) {
