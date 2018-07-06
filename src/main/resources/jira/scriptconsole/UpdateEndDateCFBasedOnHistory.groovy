@@ -16,7 +16,7 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
 String user = "tech_user";
-String jqlQuery = "project = 'Infra : Infrastructure' and issuekey = INFRA-26838";
+String jqlQuery = "project = 'TEST : TESTstructure' and issuekey = TEST-26838";
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 
 SearchService searchService = ComponentAccessor.getComponentOfType(SearchService.class);
@@ -28,8 +28,6 @@ if (parseResult.isValid()) {
     final SearchResults results = searchService.search(applicationUser, parseResult.getQuery(), PagerFilter.getUnlimitedFilter());
     issues = results.getIssues();
 }
-
-
 
 if (issues.size() > 0) {
 

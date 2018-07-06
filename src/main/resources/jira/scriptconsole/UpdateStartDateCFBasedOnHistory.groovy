@@ -16,7 +16,7 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
 String user = "tech_user";
-String jqlQuery = "project = 'Infra : Infrastructure' and issuekey = INFRA-26743";
+String jqlQuery = "project = 'TEST : TESTstructure' and issuekey = TEST-26743";
 
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
 SearchService searchService = ComponentAccessor.getComponentOfType(SearchService.class);
