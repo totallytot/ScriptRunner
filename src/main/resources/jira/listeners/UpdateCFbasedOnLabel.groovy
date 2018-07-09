@@ -50,14 +50,17 @@ if (labels != null && labels.size() > 0) {
                     it.toString() == team;
                 }
 
-                IssueService issueService = ComponentAccessor.getIssueService();
-                IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
-                issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString());
-                IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters);
+                if (value != null) {
 
-                if (validationResult.isValid()) {
-                    issueService.update(applicationUser, validationResult);
-                    return
+                    IssueService issueService = ComponentAccessor.getIssueService();
+                    IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
+                    issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString());
+                    IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters);
+
+                    if (validationResult.isValid()) {
+                        issueService.update(applicationUser, validationResult);
+                        return
+                    }
                 }
             }
         }
