@@ -1,4 +1,4 @@
-package jira.postfunctions
+package jira.postfunctions.console_tests
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.CustomFieldManager
