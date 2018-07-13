@@ -4,6 +4,7 @@ import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.IssueInputParameters
+import com.atlassian.jira.issue.customfields.option.LazyLoadedOption
 import com.atlassian.jira.issue.fields.CustomField
 import com.atlassian.jira.user.ApplicationUser
 
@@ -44,3 +45,32 @@ void transitIssue(Issue issueFeature, ApplicationUser applicationUser) {
         IssueService.IssueResult transitionResult = issueService.transition(applicationUser, transitionValidationResult);
     }
 }
+
+void CopyOptionCF(Issue outIssue, Issue inIssue, Long outField, Long inField){
+
+
+    def optionsManager = ComponentAccessor.getOptionsManager()
+    String user = "tech_user";
+    def applicationUser = ComponentAccessor.getUserManager().getUserByKey(user)
+    def issueService  = ComponentAccessor.getIssueService()
+    def issueInputParam = issueService.newIssueInputParameters()
+    def customFieldManager = ComponentAccessor.getCustomFieldManager()
+    def outFieldObj = customFieldManager.getCustomFieldObject(outField)
+    def inFieldObj = customFieldManager.getCustomFieldObject(inField)
+    List<LazyLoadedOption> outFieldValue = (List<LazyLoadedOption>) outIssue.getCustomFieldValue(outFieldObj)
+
+    String[] val = new String[outFieldValue.size()];
+
+    for (int i = 0; i < outFieldValue.size(); i++) {
+        val[i] = outFieldValue.get(i).getOptionId().toString();
+    }
+
+    issueInputParam.addCustomFieldValue(inField, val)
+    def validatedResult = issueService.validateUpdate(applicationUser, inIssue.getId(), issueInputParam)
+
+    if (validatedResult.isValid()){
+
+        def result  =  issueService.update(applicationUser, validatedResult)
+    }
+}
+

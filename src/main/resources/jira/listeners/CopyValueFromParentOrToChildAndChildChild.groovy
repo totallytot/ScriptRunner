@@ -1,5 +1,5 @@
 package jira.listeners
-
+/* WITH HISTORY */
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.customfields.option.LazyLoadedOption
@@ -77,9 +77,5 @@ def CopyValue(Issue outIssue, Issue inIssue, Long outField, Long inField){
 
         def result  =  issueService.update(applicationUser, validatedResult)
     }
-
-
-
-
 }
 
