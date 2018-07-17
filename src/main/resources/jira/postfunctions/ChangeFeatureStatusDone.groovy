@@ -17,12 +17,14 @@ if (issue.getIssueType().getName().equals("Epic")) {
     IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager();
     List<IssueLink> epicLinks = issueLinkManager.getInwardLinks(issue.getId());
 
-//get issue Feature
-    Issue issueFeature = null;
-    epicLinks.each {
-        if (it.getSourceObject().getIssueType().getName().equals("Roadmap Feature")) {
+    //get issue Feature
+    if (epicLinks != null && epicLinks.size() > 0) {
+        Issue issueFeature = null;
+        epicLinks.each {
             issueFeature = it.getSourceObject();
-            changeFeature(issueFeature, applicationUser);
+            if (issueFeature.getIssueType().getName().equals("Roadmap Feature") && issueFeature.getKey().contains("INFRA-")) {
+                changeFeature(issueFeature, applicationUser);
+            }
         }
     }
 }
