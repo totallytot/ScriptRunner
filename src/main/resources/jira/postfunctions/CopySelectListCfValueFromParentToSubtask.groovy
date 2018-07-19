@@ -15,8 +15,8 @@ Issue parentIssue = issue.getParentObject();
 CustomField bpTeam = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(18800L);
 LazyLoadedOption value = (LazyLoadedOption) parentIssue.getCustomFieldValue(bpTeam);
 
-if (issue.getCustomFieldValue(bpTeam) == null) {
-
+if (issue.getCustomFieldValue(bpTeam) == null)
+{
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
     issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString())
