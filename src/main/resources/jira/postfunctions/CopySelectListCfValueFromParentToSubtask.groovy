@@ -19,8 +19,7 @@ if (issue.getCustomFieldValue(bpTeam) == null)
 {
     IssueService issueService = ComponentAccessor.getIssueService();
     IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
-    issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString())
-            .setSkipScreenCheck(true);
+    issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString());
     IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters);
     if (validationResult.isValid()) IssueService.IssueResult result = issueService.update(applicationUser, validationResult);
 }
