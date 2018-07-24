@@ -9,7 +9,7 @@ import com.atlassian.jira.bc.project.version.VersionService
 import com.atlassian.jira.bc.project.version.VersionBuilder
 
 //for testing in order to catch the user
-String user = "ext_alexk"
+String user = "tech_user"
 ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByName(user)
 JiraAuthenticationContext jiraAuthenticationContext = ComponentAccessor.getJiraAuthenticationContext()
 jiraAuthenticationContext.setLoggedInUser(applicationUser)

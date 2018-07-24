@@ -16,49 +16,49 @@ import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.user.ApplicationUser
 
-String user = "tech_user";
-ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user);
+String user = "tech_user"
+ApplicationUser applicationUser = ComponentAccessor.getUserManager().getUserByKey(user)
 
-MutableIssue issue = (MutableIssue) event.getIssue();
-Set<Label> labels = issue.getLabels();
+MutableIssue issue = (MutableIssue) event.getIssue()
+Set<Label> labels = issue.getLabels()
 
 
 if (labels != null && labels.size() > 0) {
 
-    Map<String, String> data = new HashMap<>();
-    data.put("AB", "Angry Beavers");
-    data.put("dt", "Dream team");
-    data.put("BSTeam", "Brain Squad");
-    data.put("BotBotB", "Fast&Furious");
-    data.put("fastFurious", "Fast&Furious");
-    data.put("RDS", "Refactoring Dark Side");
-    data.put("HP", "Hypersonic Pancakes"); //project in (CCS, CCH) AND labels = HP
-    data.put("FF4", "Team 42");
-    data.put("mess", "Man Eating Squirels");
-    data.put("ManEatingSquirrels", "Man Eating Squirels");
+    Map<String, String> data = new HashMap<>()
+    data.put("AB", "Angry Beavers")
+    data.put("dt", "Dream team")
+    data.put("BSTeam", "Brain Squad")
+    data.put("BotBotB", "Fast&Furious")
+    data.put("fastFurious", "Fast&Furious")
+    data.put("RDS", "Refactoring Dark Side")
+    data.put("HP", "Hypersonic Pancakes") //project in (CCS, CCH) AND labels = HP
+    data.put("FF4", "Team 42")
+    data.put("mess", "Man Eating Squirels")
+    data.put("ManEatingSquirrels", "Man Eating Squirels")
 
     labels.each{
-        String labelName = it.getLabel();
+        String labelName = it.getLabel()
         data.each { label, team ->
 
             if(labelName.equals(label)){
 
-                CustomField bpTeam = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(18800L);
-                FieldConfig fieldConfig = bpTeam.getRelevantConfig(issue);
+                CustomField bpTeam = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(18800L)
+                FieldConfig fieldConfig = bpTeam.getRelevantConfig(issue)
 
                 Option value = ComponentAccessor.optionsManager.getOptions(fieldConfig)?.find {
-                    it.toString() == team;
+                    it.toString() == team
                 }
 
                 if (value != null) {
 
-                    IssueService issueService = ComponentAccessor.getIssueService();
-                    IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
-                    issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString());
-                    IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters);
+                    IssueService issueService = ComponentAccessor.getIssueService()
+                    IssueInputParameters issueInputParameters = issueService.newIssueInputParameters()
+                    issueInputParameters.addCustomFieldValue(bpTeam.getIdAsLong(), value.getOptionId().toString())
+                    IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters)
 
                     if (validationResult.isValid()) {
-                        issueService.update(applicationUser, validationResult);
+                        issueService.update(applicationUser, validationResult)
                         return
                     }
                 }
