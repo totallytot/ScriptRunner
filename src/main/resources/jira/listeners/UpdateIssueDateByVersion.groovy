@@ -23,22 +23,28 @@ if (versions.size()>0) {
     CustomField releaseDateField = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(12309L)
     boolean start
     boolean release
-
-    if (startDateField.getValue(issue)==null) start = true
+    List<Date> startDateList = new ArrayList()
+    List<Date> releaseDateList = new ArrayList()
+    if (startDateField.getValue(issue)==null)	start = true
     else start = false
-    if (releaseDateField.getValue(issue)==null) release = true
+    if (releaseDateField.getValue(issue)==null)	release = true
     else release = false
 
     for (int i = 0; i < versions.size(); i++){
-        if (start && versions[i].startDate != null){
-            updateDateCfWithHistory(versions[i].getStartDate(),issue,applicationUser,startDateField)
-            start = false
+
+        if (versions[i].startDate != null){
+
+            startDateList.add(versions[i].startDate)
         }
-        if (release && versions[versions.size()-i-1].releaseDate != null){
-            updateDateCfWithHistory(versions[versions.size()-i-1].getReleaseDate(),issue,applicationUser,releaseDateField)
-            release = false
+        if (versions[i].releaseDate != null){
+
+            releaseDateList.add(versions[i].releaseDate)
         }
     }
+    startDateList.sort()
+    releaseDateList.sort()
+    if (start && startDateList.size()>0)      	updateDateCfWithHistory(startDateList.get(0),issue,applicationUser,startDateField)
+    if (release && releaseDateList.size()>0)	updateDateCfWithHistory(releaseDateList.get(releaseDateList.size()-1),issue,applicationUser,releaseDateField)
 }
 
 
