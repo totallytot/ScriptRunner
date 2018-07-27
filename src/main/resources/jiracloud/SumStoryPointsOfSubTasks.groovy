@@ -1,17 +1,18 @@
 package jiracloud
 
-def issuek = get('/rest/api/2/issue/' + issue.key).asObject(Map)
-if (issuek.body.fields.issuetype.name.equals("Sub-task")){
-    sumStoryPoints(issuek.body.fields.parent.key)
+if (issue.fields.issuetype.name.equals("Sub-task")){
+    def issueParent =  get('/rest/api/2/issue/' + issue.fields.parent.key).asObject(Map)
+    sumStoryPoints(issueParent.body)
 }
 else{
-    if (issuek.body.fields.issuetype.name.equals("Story"))
-        sumStoryPoints(issuek.body.key)
+    if (issue.fields.issuetype.name.equals("Story"))
+        if (issue.fields.subtasks.size() > 0)
+            sumStoryPoints(issue)
 }
 
-void sumStoryPoints(String issueKey)  {
-    def issue =  get('/rest/api/2/issue/' + issueKey).asObject(Map)
-    def subtasks = issue.body.fields.subtasks
+void sumStoryPoints(Map issueStory)  {
+
+    def subtasks = issueStory.fields.subtasks
     Number sum = 0
 
     subtasks.each{
@@ -20,7 +21,7 @@ void sumStoryPoints(String issueKey)  {
             sum = sum + subtaskIssue.body.fields.customfield_10027
     }
 
-    def result = put('/rest/api/2/issue/' + issueKey)
+    def result = put('/rest/api/2/issue/' + issueStory.key)
             .header('Content-Type', 'application/json')
             .body([
             fields:[
