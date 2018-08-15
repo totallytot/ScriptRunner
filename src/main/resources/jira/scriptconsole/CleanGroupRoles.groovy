@@ -8,7 +8,8 @@ import com.atlassian.jira.security.roles.ProjectRole;
 import com.atlassian.jira.security.roles.ProjectRoleActors;
 import com.atlassian.jira.security.roles.ProjectRoleManager;
 import com.atlassian.jira.security.roles.RoleActor
-import com.atlassian.jira.security.roles.actor.GroupRoleActorFactory;
+import com.atlassian.jira.security.roles.actor.GroupRoleActorFactory
+
 import com.atlassian.mail.server.SMTPMailServer;
 import com.atlassian.jira.mail.Email;
 import com.atlassian.mail.MailException;
@@ -22,6 +23,7 @@ String group1 = "jira-software-users";
 List<String> groups = new ArrayList();
 groups.add(group);
 groups.add(group1);
+
 
 ProjectRoleManager projectRoleManager = (ProjectRoleManager) ComponentAccessor.getComponentOfType(ProjectRoleManager.class);
 
