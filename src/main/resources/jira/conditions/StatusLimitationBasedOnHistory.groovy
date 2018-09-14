@@ -1,4 +1,4 @@
-package jira.confitions
+package jira.conditions
 
 /**Used for status limitation on "Allow all transitions" transition.
  * Example of usage:
