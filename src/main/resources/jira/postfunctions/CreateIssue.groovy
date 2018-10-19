@@ -15,7 +15,7 @@ if (applicationUser != null) {
             .setPriorityId(issue.getPriority().getId())
             .setSummary(issue.getSummary())
             .setIssueTypeId(issue.getIssueType().getId())
-            .setDescription("created from sr")
+            .setDescription("created from post-function")
             .setSkipScreenCheck(true)
 }
 
