@@ -28,26 +28,30 @@ for (int i = 0; i<childProjetsKeys.size(); i++){
     for (int j = 0; j<parentVersions.size(); j++){
         boolean setStartDate
         boolean setReleaseDate
+        boolean syncronizedVersion
         if (parentVersions[j].startDate != null) setStartDate = true
         if (parentVersions[j].releaseDate != null) setReleaseDate = true
-
-        if (setStartDate || setReleaseDate){
-
-            for (int k = 0; k<childVersions.size(); k++){
-
-                if (parentVersions[j].name.equals(childVersions[k].name)){
-
-                    VersionBuilder versionBuilder = versionService.newVersionBuilder(childVersions[k])
-                    if (setStartDate) versionBuilder.startDate(parentVersions[j].startDate)
-                    if (setReleaseDate) versionBuilder.releaseDate(parentVersions[j].releaseDate)
-                    VersionService.VersionBuilderValidationResult result = versionService.validateUpdate(applicationUser, versionBuilder)
-
-                    if (result.isValid()) {
-                        versionService.update(applicationUser,result)
-                    }
-                    break
-                }
+        for (int k = 0; k<childVersions.size(); k++){
+            if (parentVersions[j].name.equals(childVersions[k].name)){
+                VersionBuilder versionBuilder = versionService.newVersionBuilder(childVersions[k])
+                if (setStartDate) versionBuilder.startDate(parentVersions[j].startDate)
+                if (setReleaseDate) versionBuilder.releaseDate(parentVersions[j].releaseDate)
+                versionBuilder.released(parentVersions[j].released)
+                VersionService.VersionBuilderValidationResult result = versionService.validateUpdate(applicationUser, versionBuilder)
+                if (result.isValid()) versionService.update(applicationUser,result)
+                syncronizedVersion = true
+                break
             }
+        }
+        if (!syncronizedVersion){
+            VersionBuilder versionBuilder = versionService.newVersionBuilder()
+            versionBuilder.projectId(childProject.getId())
+            versionBuilder.name(parentVersions[j].name)
+            versionBuilder.startDate(parentVersions[j].startDate)
+            versionBuilder.releaseDate(parentVersions[j].releaseDate)
+            versionBuilder.released(parentVersions[j].released)
+            VersionService.VersionBuilderValidationResult result = versionService.validateCreate(applicationUser, versionBuilder)
+            if (result.isValid()) versionService.create(applicationUser,result)
         }
     }
 }
