@@ -6,7 +6,6 @@ import com.atlassian.jira.issue.MutableIssue
 def commentMgr = ComponentAccessor.commentManager
 def issue = event.issue as MutableIssue
 
-
 // gather the original author and comment body from the original issues comment
 def type = issue.issueType.name
 def newComment = event.comment
