@@ -19,15 +19,15 @@ void updateDateCfWithHistory(String stringDate, Long cf){
     if (updateDate.getValue(issue) == null)
     {
 
-        def user = "tech_user";
+        def user = "tech_user"
         def applicationUser = ComponentAccessor.getUserManager().getUserByKey(user)
-        def issueService = ComponentAccessor.getIssueService();
-        def issueInputParameters = issueService.newIssueInputParameters();
-        issueInputParameters.addCustomFieldValue(updateDate.getIdAsLong(), stringDate);
-        def validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters);
+        def issueService = ComponentAccessor.getIssueService()
+        def issueInputParameters = issueService.newIssueInputParameters()
+        issueInputParameters.addCustomFieldValue(updateDate.getIdAsLong(), stringDate)
+        def validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters)
 
         if (validationResult.isValid()) {
-            issueService.update(applicationUser, validationResult);
+            issueService.update(applicationUser, validationResult)
         }
     }
 }

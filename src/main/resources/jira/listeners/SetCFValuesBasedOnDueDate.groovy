@@ -22,18 +22,18 @@ if (issue.getIssueType().getName() == "Epic"){
     }
 }
 
-def updateDateCfWithHistory(String stringDate, Long cf){
+void updateDateCfWithHistory(String stringDate, Long cf){
 
     def issue = event.issue
     def updateDate = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(cf)
     if (updateDate.getValue(issue) == null)
     {
-        def user = "tech_user";
+        def user = "tech_user"
         def applicationUser = ComponentAccessor.getUserManager().getUserByKey(user)
-        def issueService = ComponentAccessor.getIssueService();
-        def issueInputParameters = issueService.newIssueInputParameters();
+        def issueService = ComponentAccessor.getIssueService()
+        def issueInputParameters = issueService.newIssueInputParameters()
         issueInputParameters.addCustomFieldValue(updateDate.getIdAsLong(), stringDate)
-        def validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters);
+        def validationResult = issueService.validateUpdate(applicationUser, issue.getId(), issueInputParameters)
         if (validationResult.isValid()) {
             issueService.update(applicationUser, validationResult).hasWarnings()
         }
