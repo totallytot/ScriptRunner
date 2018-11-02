@@ -13,7 +13,7 @@ def originalAuthor = newComment.authorApplicationUser
 def commentBody = newComment.body
 
 // get original issue's linked issues and create comment on the linked issue
-if (commentBody && type == "Service Request") {
+if (commentBody && type == "Task") {
         def attacher = ComponentAccessor.attachmentManager
         def linker = ComponentAccessor.issueLinkManager
         def sourceAttaches = attacher.getAttachments(issue)
@@ -26,13 +26,13 @@ if (commentBody && type == "Service Request") {
                 //get attachments from linked issue
                 def linkedAttaches = attacher.getAttachments(destinationIssue)
                 //check if this attachment from the linked issue already exists on the current issue
-                //and if not exist copy it to the linked issue
-                linkedAttaches.each { linkedAttach ->
-                        if (!sourceAttaches.find { sourceAttach ->
-                                        sourceAttach.filename == linkedAttach.filename &&
+                //and if not exists copy it to the linked issue
+                if (sourceAttaches) sourceAttaches.each{ sourceAttach ->
+                        if (!linkedAttaches.find { linkedAttach ->
+                                sourceAttach.filename == linkedAttach.filename &&
                                         sourceAttach.filesize == linkedAttach.filesize &&
                                         sourceAttach.mimetype == linkedAttach.mimetype
-                        }) attacher.copyAttachment(linkedAttach, originalAuthor, destinationIssue)
+                        }) attacher.copyAttachment(sourceAttach, originalAuthor, destinationIssue.key)
                 }
-    }
+        }
 }
