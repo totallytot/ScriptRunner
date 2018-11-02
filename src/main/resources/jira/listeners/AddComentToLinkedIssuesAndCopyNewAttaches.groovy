@@ -2,7 +2,6 @@ package jira.listeners
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.MutableIssue
-import com.atlassian.jira.issue.attachment.Attachment
 
 def commentMgr = ComponentAccessor.commentManager
 def issue = event.issue as MutableIssue
