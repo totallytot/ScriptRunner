@@ -29,7 +29,7 @@ if (commentBody && type == "Task") {
                 //and if not exists copy it to the linked issue
                 if (sourceAttaches) sourceAttaches.each{ sourceAttach ->
                         if (!linkedAttaches.find { linkedAttach ->
-                                sourceAttach.filename == linkedAttach.filename &&
+                                        sourceAttach.filename == linkedAttach.filename &&
                                         sourceAttach.filesize == linkedAttach.filesize &&
                                         sourceAttach.mimetype == linkedAttach.mimetype
                         }) attacher.copyAttachment(sourceAttach, originalAuthor, destinationIssue.key)
