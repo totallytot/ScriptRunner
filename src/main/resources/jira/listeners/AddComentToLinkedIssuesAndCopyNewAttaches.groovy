@@ -24,7 +24,7 @@ if (commentBody && type == "Service Request") {
                 //copy comment
                 commentMgr.create(destinationIssue, originalAuthor, commentBody , true)
                 //get attachments from linked issue
-                def linkedAttaches = attacher.getAttachments(outwardLink.destinationObject)
+                def linkedAttaches = attacher.getAttachments(destinationIssue)
                 //check if this attachment from the linked issue already exists on the current issue
                 //and if not exist copy it to the linked issue
                 linkedAttaches.each { linkedAttach ->
