@@ -1,22 +1,23 @@
 import com.atlassian.jira.component.ComponentAccessor
 import java.text.SimpleDateFormat
+import com.atlassian.jira.issue.Issue;
 
-
-def issue = event.issue
+Issue issue = event.issue
 def dateFormat = new SimpleDateFormat("dd/MMM/YY");
 if (issue.getIssueType().getName() == "Epic"){
     if (issue.getDueDate().toString() != null){
-        def endDate = dateFormat.format(issue.getDueDate().minus(1))
+        def endDate = dateFormat.format(issue.getDueDate().minus(10))
         updateDateCfWithHistory (endDate, 16912L)
-        def epicEstimationField = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(17302L)
-        def epicEstimationValue = epicEstimationField.getValue(issue)
+        def origEstimate = issue.getOriginalEstimate()
         def startDate
-        if (epicEstimationValue != null ){
-            startDate = dateFormat.format(issue.getDueDate().minus(epicEstimationValue.toLong().intValue()))
+        if (origEstimate != null ){
+            origEstimate/=28800
+            origEstimate+=10
+            startDate = dateFormat.format(issue.getDueDate().minus((int)Math.round(origEstimate)))
             updateDateCfWithHistory (startDate, 16911L)
         }
         else{
-            startDate = dateFormat.format(issue.getDueDate().minus(2))
+            startDate = dateFormat.format(issue.getDueDate().minus(11))
             updateDateCfWithHistory (startDate, 16911L)
         }
     }
