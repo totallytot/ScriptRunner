@@ -13,11 +13,9 @@ if (optionToSelect != null && currentValue == null) {
     def issueService = ComponentAccessor.getIssueService()
     def issueInputParameters = issueService.newIssueInputParameters()
 
-    def jiraAuthenticationContextReporter = ComponentAccessor.getJiraAuthenticationContext()
-    def currentUser = jiraAuthenticationContextReporter.getLoggedInUser()
-
-    issueInputParameters.addCustomFieldValue(selectListField.getIdAsLong(), optionToSelect.getOptionId().toString())
-    .setSkipScreenCheck(true)
-    IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(currentUser, issue.getId(), issueInputParameters)
-    if (validationResult.isValid()) IssueService.IssueResult result = issueService.update(currentUser, validationResult)
+    def currentUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
+    issueInputParameters.addCustomFieldValue(selectListField.idAsLong, optionToSelect.optionId.toString())
+            .setSkipScreenCheck(true)
+    IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(currentUser, issue.id, issueInputParameters)
+    if (validationResult.valid) issueService.update(currentUser, validationResult)
 }
