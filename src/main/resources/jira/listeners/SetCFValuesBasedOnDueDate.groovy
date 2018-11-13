@@ -1,10 +1,10 @@
+
 import com.atlassian.jira.component.ComponentAccessor
 import java.text.SimpleDateFormat
-import com.atlassian.jira.issue.Issue;
 
-Issue issue = event.issue
+def issue = event.issue
 def dateFormat = new SimpleDateFormat("dd/MMM/YY");
-if (issue.getIssueType().getName() == "Epic"){
+if (issue.getStatus().getStatusCategory().getName()!= "Complete"){
     if (issue.getDueDate().toString() != null){
         def endDate = dateFormat.format(issue.getDueDate().minus(10))
         updateDateCfWithHistory (endDate, 16912L)
