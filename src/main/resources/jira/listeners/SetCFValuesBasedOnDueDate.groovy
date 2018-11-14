@@ -41,7 +41,7 @@ void updateDateCfWithHistory(String stringDate, Long cf){
     }
 }
 
-//// console version
+/* console version
 import com.atlassian.jira.component.ComponentAccessor
 import java.text.SimpleDateFormat
 
@@ -86,3 +86,4 @@ void updateDateCfWithHistory(String stringDate, Long cf, def issue){
         }
     }
 }
+*/
