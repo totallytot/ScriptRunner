@@ -1,3 +1,4 @@
+package jira.postfunctions
 import com.atlassian.jira.bc.issue.IssueService
 if (issue.get("customfield_10964")==1){
     IssueService issueService = ComponentAccessor.getIssueService()

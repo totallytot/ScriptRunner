@@ -1,4 +1,4 @@
-
+package jira.listeners
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 
@@ -86,8 +86,7 @@ void updateDateCfWithHistory(String stringDate, Long cf){
 }
 
 
-///console version
-
+/*console version
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.component.ComponentAccessor
 import java.text.SimpleDateFormat
@@ -185,7 +184,7 @@ void updateDateCfWithHistory(String stringDate, Long cf, Issue issue){
 }
 
 
-
+*/
 
 
 
