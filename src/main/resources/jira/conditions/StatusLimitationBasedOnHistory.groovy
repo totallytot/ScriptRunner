@@ -9,9 +9,7 @@ package jira.conditions
 */
 import com.atlassian.jira.component.ComponentAccessor
 
-def issueManager = ComponentAccessor.getIssueManager()
-def changeHistoryManager = ComponentAccessor.getChangeHistoryManager()
-
+def changeHistoryManager = ComponentAccessor.changeHistoryManager
 passesCondition = (
         changeHistoryManager.getAllChangeItems(issue).any {
             it.field == "status" && "Review before CE" in it.fromValues.values()
