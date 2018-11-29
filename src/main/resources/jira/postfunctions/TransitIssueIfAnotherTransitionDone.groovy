@@ -1,5 +1,7 @@
 package jira.postfunctions
 import com.atlassian.jira.bc.issue.IssueService
+import com.atlassian.jira.component.ComponentAccessor
+
 if (issue.get("customfield_10964")==1){
     IssueService issueService = ComponentAccessor.getIssueService()
     def iIParameters = issueService.newIssueInputParameters();
