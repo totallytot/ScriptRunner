@@ -11,7 +11,7 @@ Date date = new Date()
 if (!issue.isSubTask() && issue.getStatus().getStatusCategory().getName()!="Complete" && sprintField.getValue(issue) == null && startDate.getValue(issue)<date){
     def spField = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(10002L)
     int sp
-    if (spField.getValue(issue)!=null) sp = (int)spField.getValue(issue)
+    if (spField.getValue(issue)!=null && spField.getValue(issue)!=0) sp = (int)spField.getValue(issue)
     else sp = 1
     Calendar createdDate = Calendar.getInstance()
     createdDate.setTime(issue.getUpdated())
@@ -108,7 +108,7 @@ issues.each {
     if (!issue.isSubTask()  && issue.getStatus().getStatusCategory().getName()!="Complete" && sprintField.getValue(issue) == null && (Date)startDate.getValue(issue)<date){
         def spField = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(10002L)
         int sp
-        if (spField.getValue(issue)!=null) sp = (int)spField.getValue(issue)
+        if (spField.getValue(issue)!=null && spField.getValue(issue)!=0) sp = (int)spField.getValue(issue)
         else sp = 1
         Calendar createdDate = Calendar.getInstance()
         def month =  createdDate.get(Calendar.MONTH)
