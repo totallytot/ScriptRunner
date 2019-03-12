@@ -9,29 +9,34 @@ import webwork.action.ActionContext
 def log = Logger.getLogger("check-me")
 log.setLevel(Level.DEBUG)
 
-
+def issueTypes = ["Technical Story", "User Story", "Bug (Dev)", "Defect (Production | V&V)", "Software Implementation Bug"]
 if (issue.parentObject.issueType.name == "Product Requirement") {
-    def inwardValidation = ComponentAccessor.issueLinkManager.getInwardLinks(issue.id).any {
-        it.issueLinkType.inward == "has the bug" &&
-                it.sourceObject.issueType.name in ["Technical Story", "User Story", "Bug (Dev)",
-                                                   "Defect (Production | V&V)", "Software Implementation Bug"]
+    runIssueLinksValidation("has the bug", "is a requirement for", issueTypes)
+} else if (issue.parentObject.issueType.name == "Software Specification") {
+    runIssueLinksValidation("has the bug", "is a specification for", issueTypes)
+}
+
+boolean runIssueLinksValidation (String inwardLink, String outwardLink, List issueTypeValidation) {
+    def inwardLinksValidation = ComponentAccessor.issueLinkManager.getInwardLinks(issue.id).any {
+        it.issueLinkType.inward == inwardLink && it.sourceObject.issueType.name in issueTypeValidation
     }
-    def outwardValidation = ComponentAccessor.issueLinkManager.getOutwardLinks(issue.id).any {
-        it.issueLinkType.outward == "is a requirement for" &&
-                it.destinationObject.issueType.name in ["Technical Story", "User Story", "Bug (Dev)",
-                                                        "Defect (Production | V&V)", "Software Implementation Bug"]
+    def outwardLinksValidation = ComponentAccessor.issueLinkManager.getOutwardLinks(issue.id).any {
+        it.issueLinkType.outward == outwardLink && it.destinationObject.issueType.name in issueTypeValidation
     }
-    def fieldManager = ComponentAccessor.getFieldManager()
-    def linksSystemField = fieldManager.getField("issuelinks") as IssueLinksSystemField
-    def request = ActionContext.getRequest()
-    def screenValidation = false
+    def linksSystemField = ComponentAccessor.fieldManager.getField("issuelinks") as IssueLinksSystemField
+    def request = ActionContext.request
+    def screenLinksValidation = false
     if (request) {
-        def params = request.getParameterMap()
+        def params = request.parameterMap
         def issueLinkingValue = linksSystemField.getRelevantParams(params) as IssueLinksSystemField.IssueLinkingValue
-        screenValidation = ((issueLinkingValue.linkDescription == "has the bug" ||
-                issueLinkingValue.linkDescription == "is a requirement for") && issueLinkingValue.linkedIssues.size() > 0)
+        issueLinkingValue
+        screenLinksValidation = ((issueLinkingValue.linkDescription in [inwardLink, outwardLink])
+                && issueLinkingValue.linkedIssues.size() > 0
+                && issueLinkingValue.linkedIssues.any {
+            ComponentAccessor.issueManager.getIssueObject(it).issueType.name in issueTypeValidation
+        })
     }
-    inwardValidation || outwardValidation || screenValidation
+    inwardLinksValidation || outwardLinksValidation || screenLinksValidation
 }
 
 /*
