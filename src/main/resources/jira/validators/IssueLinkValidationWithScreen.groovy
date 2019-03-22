@@ -29,7 +29,6 @@ boolean runIssueLinksValidation (String inwardLink, String outwardLink, List iss
     if (request) {
         def params = request.parameterMap
         def issueLinkingValue = linksSystemField.getRelevantParams(params) as IssueLinksSystemField.IssueLinkingValue
-        issueLinkingValue
         screenLinksValidation = ((issueLinkingValue.linkDescription in [inwardLink, outwardLink])
                 && issueLinkingValue.linkedIssues.size() > 0
                 && issueLinkingValue.linkedIssues.any {
