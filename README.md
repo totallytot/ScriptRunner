@@ -1,3 +1,6 @@
+https://developer.atlassian.com/server/jira/platform/performing-issue-operations/ - IssueService vs issueManager
+
+
 Script Runner Repository
 ========================
 
