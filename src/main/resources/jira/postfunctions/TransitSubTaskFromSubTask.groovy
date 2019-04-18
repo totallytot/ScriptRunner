@@ -4,16 +4,17 @@ import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
 
 def parentIssue = issue.parentObject
-def subTaskIssueToTransit = ComponentAccessor.issueLinkManager.getOutwardLinks(parentIssue.id)
-        .find{it.destinationObject.status.name == "Released"}?.destinationObject
+def subTaskIssueToTransit = parentIssue.subTaskObjects.findAll{it.status.name == "Released"}
 
 if (subTaskIssueToTransit) {
     def issueService = ComponentAccessor.issueService
     def currentUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
-    def issueInputParameters = issueService.newIssueInputParameters()
-    IssueService.TransitionValidationResult transitionValidationResult =
-            issueService.validateTransition(currentUser, subTaskIssueToTransit.id, 321, issueInputParameters)
-    if (transitionValidationResult.isValid()) {
-        issueService.transition(currentUser, transitionValidationResult)
+    subTaskIssueToTransit.each{
+        def issueInputParameters = issueService.newIssueInputParameters()
+        IssueService.TransitionValidationResult transitionValidationResult =
+                issueService.validateTransition(currentUser, it.id, 321, issueInputParameters)
+        if (transitionValidationResult.isValid()) {
+            issueService.transition(currentUser, transitionValidationResult)
+        }
     }
 }
