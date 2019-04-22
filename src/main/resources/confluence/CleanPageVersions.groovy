@@ -21,6 +21,7 @@ pages.each {
             try {
                 def pageForRemoval = (Page) pageManager.getPageByVersion(it, i)
                 removedPagesTitles << "title: " + pageForRemoval.displayTitle + " - version: " + pageForRemoval.version
+                pageForRemoval.remove(pageManager)
             } catch (NullPointerException e) {
                 log.error(e.message)
             }
