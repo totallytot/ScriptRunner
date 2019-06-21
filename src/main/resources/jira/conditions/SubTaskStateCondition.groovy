@@ -1,8 +1,16 @@
 package jira.conditions
 
-/**
- * Subtask 6 and 7 cannot be put into ready status until subtasks 1-5 are in finished status.
- */
+import com.atlassian.jira.component.ComponentAccessor
 
-if (issue.issueType.name == "Sub-task2")
-    passesCondition = issue.parentObject.subTaskObjects.take(5).every {it.status.name == "Finished"}
+def issue = ComponentAccessor.issueManager.getIssueObject(" ") //for testing in script console only
+
+def affectedSubTaskSummaries = ["Rule Go Live - Apply Soc Core Tag", "One Week Follow Up",
+                                "One Month Follow Up"].collect { it.toLowerCase() }
+def conditionSubTaskSummaries = ["Content Approval"].collect { it.toLowerCase() }
+def conditionStatus = "Approved"
+
+if (issue.summary.toLowerCase() in affectedSubTaskSummaries) {
+    passesCondition = issue.parentObject.subTaskObjects.any {
+        it.summary.toLowerCase() in conditionSubTaskSummaries && it.status.name == conditionStatus
+    }
+}
