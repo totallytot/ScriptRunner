@@ -12,7 +12,8 @@ def conditionSubTaskSummaries = ["Splunk Trending Queries and Supporting Queries
                                  "soc qa"].collect { it.toLowerCase() }
 def conditionStatus = "Done"
 def transitionSubTaskSummaries = ["Soc approval"].collect { it.toLowerCase() }
-def assigneeUsername = "robert.anthony"
+def assigneeUsername = "user"
+def scriptExecutor = "user"
 
 def conditionSubTasks = issue.parentObject.subTaskObjects.findAll {
     it.summary.toLowerCase() in conditionSubTaskSummaries
@@ -26,6 +27,7 @@ def transitionCondition = conditionSubTasks.every {
 }
 
 def transitionIssue = { Issue localIssue ->
+    ComponentAccessor.jiraAuthenticationContext.setLoggedInUser(ComponentAccessor.userManager.getUserByKey(scriptExecutor))
     def currentUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
     def issueService = ComponentAccessor.issueService
     def issueInputParameters = issueService.newIssueInputParameters()
