@@ -71,11 +71,6 @@
             <version>${scriptrunner.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.onresolve.stash.groovy</groupId>
-            <artifactId>groovyrunner</artifactId>
-            <version>${scriptrunner.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-annotation</artifactId>
             <version>${atlassian.spring.scanner.version}</version>
@@ -95,7 +90,7 @@
         <confluence.version>6.15.3</confluence.version>
         <amps.version>6.2.1</amps.version>
         <groovy.version>3.0.0-beta-2</groovy.version>
-        <scriptrunner.version>4.3.4</scriptrunner.version>
-        <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
+        <scriptrunner.version>5.5.8</scriptrunner.version>
+        <atlassian.spring.scanner.version>2.1.10</atlassian.spring.scanner.version>
     </properties>
 </project>
