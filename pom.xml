@@ -43,24 +43,18 @@
             <version>${bitbucket.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>2.5.6</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.atlassian.confluence</groupId>
             <artifactId>confluence</artifactId>
             <version>${confluence.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
@@ -81,17 +75,27 @@
             <artifactId>groovyrunner</artifactId>
             <version>${scriptrunner.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-annotation</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-runtime</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <properties>
-        <jira.version>7.9.2</jira.version>
+        <jira.version>7.13.5</jira.version>
         <bitbucket.version>4.2.0</bitbucket.version>
-        <confluence.version>6.6.0</confluence.version>
+        <confluence.version>6.15.3</confluence.version>
         <amps.version>6.2.1</amps.version>
-        <groovy.version>2.4.3</groovy.version>
+        <groovy.version>3.0.0-beta-2</groovy.version>
         <scriptrunner.version>4.3.4</scriptrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
-
-
     </properties>
 </project>

@@ -18,4 +18,3 @@ passesCondition = (
                 issue.getStatus().getName().equals("! from PL") ||
                 issue.getStatus().getName().equals("LC Translated"))
 )
-
