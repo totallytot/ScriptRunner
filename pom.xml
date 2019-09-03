@@ -38,12 +38,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.bitbucket.server</groupId>
-            <artifactId>bitbucket-api</artifactId>
-            <version>${bitbucket.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>2.5.6</version>
@@ -61,16 +55,6 @@
             <version>${groovy.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.onresolve.jira.groovy</groupId>
-            <artifactId>groovyrunner</artifactId>
-            <version>${scriptrunner.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.onresolve.confluence.groovy</groupId>
-            <artifactId>groovyrunner</artifactId>
-            <version>${scriptrunner.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-annotation</artifactId>
             <version>${atlassian.spring.scanner.version}</version>
@@ -86,11 +70,9 @@
 
     <properties>
         <jira.version>7.13.5</jira.version>
-        <bitbucket.version>4.2.0</bitbucket.version>
         <confluence.version>6.15.3</confluence.version>
         <amps.version>6.2.1</amps.version>
-        <groovy.version>3.0.0-beta-2</groovy.version>
-        <scriptrunner.version>5.5.8</scriptrunner.version>
+        <groovy.version>2.4.16</groovy.version>
         <atlassian.spring.scanner.version>2.1.10</atlassian.spring.scanner.version>
     </properties>
 </project>
