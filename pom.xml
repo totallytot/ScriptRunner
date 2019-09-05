@@ -55,6 +55,16 @@
             <version>${groovy.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.onresolve.jira.groovy</groupId>
+            <artifactId>groovyrunner</artifactId>
+            <version>${scriptrunner.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.onresolve.confluence.groovy</groupId>
+            <artifactId>groovyrunner</artifactId>
+            <version>${scriptrunner.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-annotation</artifactId>
             <version>${atlassian.spring.scanner.version}</version>
@@ -71,8 +81,8 @@
     <properties>
         <jira.version>7.13.5</jira.version>
         <confluence.version>6.15.3</confluence.version>
-        <amps.version>6.2.1</amps.version>
         <groovy.version>2.4.16</groovy.version>
+        <scriptrunner.version>5.5.8</scriptrunner.version>
         <atlassian.spring.scanner.version>2.1.10</atlassian.spring.scanner.version>
     </properties>
 </project>
