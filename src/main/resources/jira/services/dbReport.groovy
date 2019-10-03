@@ -7,31 +7,34 @@ import org.ofbiz.core.entity.DelegatorInterface
 import groovy.xml.MarkupBuilder
 import com.atlassian.mail.Email
 
+//input data
 def valueForSearch = "password"
-def mailSubject = "Jira Comments Security Report. Value for search: " + valueForSearch
-def condition = "where lower(ja.actionbody) like '%" + valueForSearch + "%';";
+def mailSubject = "Jira Security Report. Search for ${valueForSearch} in comments."
 def recipient = "0@example.biz"
 def cc = "1@example.biz, 2@example.com"
-
-def sqlStatement = '''
- select p.pname, concat(p.pkey, '-', ji.issuenum) as "issuekey", concat('https://jira.example.com/browse/', p.pkey, '-', ji.issuenum) as "link",
- ja.author, ja.created, ja.updateauthor, ja.updated, p.lead  as "lead" from jiraaction ja
+def sqlStatement = """
+ select p.pname, concat(p.pkey, '-', ji.issuenum) as "issuekey", 
+ concat('https://jira.example.com/browse/', p.pkey, '-', ji.issuenum) as "link",
+ ja.author, ja.created, ja.updateauthor, ja.updated, p.lead from jiraaction ja
  left join jiraissue ji on ji.id = ja.issueid
- left join project p on p.id = ji.project 
-'''
-sqlStatement += condition
+ left join project p on p.id = ji.project
+ where lower(ja.actionbody) like 
+ """ + "'%${valueForSearch}%';"
 
+//connect to DB
 def delegator = (DelegatorInterface) ComponentAccessor.getComponent(DelegatorInterface)
 def helperName = delegator.getGroupHelperName("default")
 def connection = ConnectionFactory.getConnection(helperName)
 def sql = new Sql(connection)
+
+//build html mail body
 def writer = new StringWriter()
 def builder = new MarkupBuilder(writer)
-
+def counter = 1
 try {
     builder.html {
         head {
-            style('''
+            style("""
     table { 
         font-family: arial, sans-serif;
         border-collapse: collapse;
@@ -45,31 +48,33 @@ try {
      tr:nth-child(even) {                   
         background-color: #dddddd;  
     }
-    ''')
+    """)
         }
         body {
-            table(id: "te") {
+            table {
                 tr {
+                    th("Counter")
                     th("Project")
                     th("Issue Key")
                     th("Link")
                     th("Creator")
                     th("Created")
                     th("Update Author")
-                    th("Update Author")
+                    th("Updated")
                     th("Project Lead")
                 }
                 sql.eachRow(sqlStatement) { row ->
                     tr {
+                        td(counter++)
                         td("${row.pname}")
                         td("${row.issuekey}")
                         td("${row.link}")
                         td("${row.author}")
                         td("${row.created}")
+                        td("${row.updateauthor}")
                         td("${row.updated}")
                         td("${row.lead}")
                     }
-
                 }
             }
         }
@@ -78,6 +83,8 @@ try {
     sql.close()
 }
 def body = writer.toString()
+
+//send mail
 def mailServer = ComponentAccessor.getMailServerManager().getDefaultSMTPMailServer()
 if (mailServer) {
     Email email = new Email(recipient)
@@ -87,5 +94,5 @@ if (mailServer) {
     email.setBody(body)
     mailServer.send(email)
 }
-//for script console
-//writer.toString()
+//for output in script console
+//body
