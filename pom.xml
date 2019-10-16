@@ -71,9 +71,14 @@
             <artifactId>groovyrunner</artifactId>
             <version>${scriptrunner.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy.modules.http-builder</groupId>
+            <artifactId>http-builder</artifactId>
+            <version>0.6</version>
+        </dependency>
     </dependencies>
     <properties>
-        <jira.version>7.13.5</jira.version>
+        <jira.version>8.3.2</jira.version>
         <confluence.version>6.15.3</confluence.version>
         <groovy.version>2.4.16</groovy.version>
         <atlassian.spring.scanner.version>2.1.10</atlassian.spring.scanner.version>
