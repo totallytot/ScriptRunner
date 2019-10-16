@@ -8,12 +8,12 @@ import com.atlassian.jira.component.ComponentAccessor
 import java.text.SimpleDateFormat
 
 def f = new SimpleDateFormat("dd MMM yyyy HH:mm")
-def authRequest = new HTTPBuilder("https://amersham-jira.radbeeqms.com/rest/auth/1/session")
+def authRequest = new HTTPBuilder("https://jira.example.com/rest/auth/1/session")
 def authResponse = authRequest.request(POST,JSON) { req ->
     body = [username: 'auto', password: 'secret']
     req.setHeader("Content-Type", "application/json")
 }
-def signaturesRequest = new HTTPBuilder("https://amersham-jira.radbeeqms.com/rest/electronic-signature/1.0/signature/${issue.key}")
+def signaturesRequest = new HTTPBuilder("https://jira.example.com/rest/electronic-signature/1.0/signature/${issue.key}")
 def signatures = signaturesRequest.request(GET,JSON) { req ->
     req.setHeader("Content-Type", "application/json")
     req.setHeader("Cookie", "JSESSIONID="+authResponse.get("session").get("value").toString())
