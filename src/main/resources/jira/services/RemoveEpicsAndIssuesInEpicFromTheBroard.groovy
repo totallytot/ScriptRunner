@@ -12,7 +12,7 @@ import com.atlassian.jira.issue.label.LabelManager
  * So we select show all option. The board displays the issue according the the configured filter in the board.
  * So if we want the issues to be not displayed at some point of time we need the issue to become outside the filter.
  * It can be achieved by adding label 'archived_hide_from_tcc_board'. The original filter will be changed to:
- * Original filter AND label = label 'archived_hide_from_tcc_board
+ * Original filter AND label != label 'archived_hide_from_tcc_board
  * When the epic is completed we can setup the scheduler which will add label 'archived_hide_from_tcc_board' to
  * completed epic and in it's tasks(issue in the epic) after X days. For X days - the initial value is 2 weeks.
  */
