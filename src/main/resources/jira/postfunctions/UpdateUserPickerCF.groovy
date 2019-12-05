@@ -1,4 +1,4 @@
-package jira.postfunctions.console_tests
+package jira.postfunctions
 
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
