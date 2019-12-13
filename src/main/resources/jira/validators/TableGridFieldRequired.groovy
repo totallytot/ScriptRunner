@@ -10,7 +10,7 @@ def tgeCustomField = ComponentAccessor.customFieldManager.getCustomFieldObjects(
     it.name == "Immediate actions (corrections)"
 } as CustomField
 def user = ComponentAccessor.jiraAuthenticationContext.loggedInUser.directoryUser
-Class dataManagerClass = ComponentAccessor.pluginAccessor.getClassLoader()
+Class dataManagerClass = ComponentAccessor.pluginAccessor.classLoader
         .findClass("com.idalko.jira.plugins.igrid.api.data.TGEGridTableDataManager")
 def tgeGridDataManager = ComponentAccessor.getOSGiComponentInstanceOfType(dataManagerClass)
 List<Map<String, Object>> gridDataList = new ArrayList<Map<String, Object>>()
@@ -20,7 +20,7 @@ try {
     gridDataList = gridData.values
     result.append("Grid ID=" + tgeCustomField.id + " data in edit mode: " + gridDataList)
 } catch (Exception e) {
-    result.append("Grid ID=" + tgeCustomField.id + " data in edit mode cannot be retrieved: " + e.getMessage() + "\n")
+    result.append("Grid ID=" + tgeCustomField.id + " data in edit mode cannot be retrieved: " + e.message + "\n")
 }
 if (gridDataList.empty)
     throw new InvalidInputException(tgeCustomField.id, "Add at least one record to 'Immediate actions (corrections)' to proceed")
