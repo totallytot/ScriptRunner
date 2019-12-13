@@ -3,11 +3,9 @@ package jira.validators
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.fields.CustomField
 import com.opensymphony.workflow.InvalidInputException
-
 /**
  * docs: https://docs.idalko.com/tgng/pages/viewpage.action?pageId=26183994
  */
-
 def tgeCustomField = ComponentAccessor.customFieldManager.getCustomFieldObjects(issue).find {
     it.name == "Immediate actions (corrections)"
 } as CustomField
@@ -16,7 +14,7 @@ Class dataManagerClass = ComponentAccessor.pluginAccessor.getClassLoader()
         .findClass("com.idalko.jira.plugins.igrid.api.data.TGEGridTableDataManager")
 def tgeGridDataManager = ComponentAccessor.getOSGiComponentInstanceOfType(dataManagerClass)
 List<Map<String, Object>> gridDataList = new ArrayList<Map<String, Object>>()
-StringBuilder result = new StringBuilder()
+def result = new StringBuilder()
 try {
     def gridData = tgeGridDataManager.readGridDataInEditMode(issue, tgeCustomField, null, null, 0, 10, user)
     gridDataList = gridData.values
