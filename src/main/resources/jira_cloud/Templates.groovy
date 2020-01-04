@@ -1,4 +1,4 @@
-package jiracloud
+package jira_cloud
 
 String getCustomFiledValue(String issueKey, String customFieldNameID) {
     def result = get("/rest/api/2/issue/${issueKey}?fields=${customFieldNameID}")

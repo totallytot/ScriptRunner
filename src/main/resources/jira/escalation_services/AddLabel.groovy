@@ -1,4 +1,4 @@
-package jira.escalationservices
+package jira.escalation_services
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue

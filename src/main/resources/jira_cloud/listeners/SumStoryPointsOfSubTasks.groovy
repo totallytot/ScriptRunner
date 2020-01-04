@@ -1,4 +1,4 @@
-package jiracloud.listeners
+package jira_cloud.listeners
 
 if (issue.fields.issuetype.name.equals("Sub-task")){
     def issueParent =  get('/rest/api/2/issue/' + issue.fields.parent.key).asObject(Map)

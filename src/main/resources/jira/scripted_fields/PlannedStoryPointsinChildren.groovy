@@ -1,4 +1,4 @@
-package jira.scriptedfields
+package jira.scripted_fields
 
 import com.atlassian.jira.component.ComponentAccessor;
 

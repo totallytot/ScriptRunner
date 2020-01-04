@@ -1,13 +1,13 @@
-package jiracloud.postfunctions
+package jira_cloud.console_tests
 
 def issueKey = "JPFCC-1"
-def issue = get('/rest/api/2/issue/' + issueKey).asObject(Map)
+def issue = get('/rest/api/2/issue/' + issueKey).asObject(Map).body
 
 if (getCustomFiledValue(issueKey, "customfield_10036") == null)
 {
     def issueEditMeta = get("/rest/api/2/issue/" + issueKey + "/editmeta").asObject(Map)
     def options = issueEditMeta.body.fields.customfield_10036.allowedValues.value
-    def reporter = issue.body.fields.reporter.key
+    def reporter = issue.fields.reporter.key
     def userGroups = get('/rest/api/2/user/groups?key=' + reporter).asObject(List).body.name
     def commons = userGroups.intersect(options)
     def result = put("/rest/api/2/issue/" + issueKey)

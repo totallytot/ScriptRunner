@@ -1,4 +1,4 @@
-package confluence.scheduledJobs
+package confluence.scheduled_jobs
 
 import com.atlassian.mail.Email
 import com.atlassian.sal.api.component.ComponentLocator

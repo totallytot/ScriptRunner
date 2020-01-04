@@ -1,4 +1,4 @@
-package jira.scriptedfields
+package jira.scripted_fields
 
 import groovyx.net.http.HTTPBuilder
 import static groovyx.net.http.Method.GET
