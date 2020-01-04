@@ -1,19 +1,14 @@
+package jira.post_functions
+
 import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.issue.Issue
-import com.atlassian.jira.issue.MutableIssue
-import com.atlassian.jira.issue.link.IssueLink;
-import com.atlassian.jira.issue.link.RemoteIssueLinkBuilder
-import com.atlassian.jira.issue.link.RemoteIssueLink
-import com.atlassian.jira.issue.link.RemoteIssueLinkManager
-import com.atlassian.jira.issue.link.IssueLinkTypeManager
 import com.atlassian.jira.issue.CustomFieldManager
+import com.atlassian.jira.issue.MutableIssue
 import com.atlassian.jira.issue.fields.CustomField
-import com.atlassian.jira.event.type.EventDispatchOption
-import com.atlassian.jira.issue.util.DefaultIssueChangeHolder
-import com.atlassian.jira.component.pico.ComponentManager
-import com.atlassian.jira.issue.ModifiedValue
-import org.apache.log4j.Logger
+import com.atlassian.jira.issue.link.RemoteIssueLinkBuilder
+import com.atlassian.jira.issue.link.RemoteIssueLinkManager
 import org.apache.log4j.Level
+import org.apache.log4j.Logger
+
 RemoteLinks script = new RemoteLinks()
 script.run(issue)
 

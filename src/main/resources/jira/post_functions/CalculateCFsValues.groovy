@@ -1,4 +1,5 @@
-package jira.postfunctions
+package jira.post_functions
+
 //Script Location: Sript Field
 //Searcher: Number Searcher
 //Template: Number Field

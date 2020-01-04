@@ -1,4 +1,4 @@
-package jira.postfunctions
+package jira.post_functions
 //UPDATE TS RW1 start OR TS RW> start
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
@@ -18,9 +18,7 @@ else{
     updateDateCfWithHistory(12532L,issue)
 }
 
-
-
-void updateDateCfWithHistory(Long cf, def issue) {
+static void updateDateCfWithHistory(Long cf, def issue) {
 
     def user = ComponentAccessor.getUserManager().getUserByName("Admin")
     Date date = new Date()

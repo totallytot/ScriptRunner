@@ -1,5 +1,4 @@
-package jira.postfunctions
-////Script Location: Post-function
+import com.atlassian.jira.component.ComponentAccessor
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.label.Label

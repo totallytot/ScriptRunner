@@ -1,9 +1,12 @@
+package jira.post_functions
+
 //AUTHOR ALEX.K
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.workflow.TransitionOptions.Builder
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
+
 def log = Logger.getLogger("com.acme.CreateSubtask")
 log.setLevel(Level.DEBUG)
 log.debug issue.getStatus().name.toString()

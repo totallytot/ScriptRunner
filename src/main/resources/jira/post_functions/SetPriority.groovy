@@ -1,7 +1,6 @@
-package jira.postfunctions
-//Script Location: Post-function
-//Sets issue priority depending on story points
+package jira.post_functions
 
+//Sets issue priority depending on story points
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.CustomFieldManager

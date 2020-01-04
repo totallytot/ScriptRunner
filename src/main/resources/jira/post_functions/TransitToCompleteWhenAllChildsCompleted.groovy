@@ -1,4 +1,5 @@
-//AUTHOR ALEX.K
+package jira.post_functions
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.workflow.TransitionOptions.Builder

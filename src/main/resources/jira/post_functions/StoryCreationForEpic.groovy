@@ -1,4 +1,4 @@
-package jira.postfunctions
+package jira.post_functions
 
 import com.atlassian.jira.component.ComponentAccessor
 

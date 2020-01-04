@@ -1,4 +1,4 @@
-package jira.postfunctions
+package jira.post_functions
 
 /**
  * post function should be place after "Re-index an issue to keep indexes in sync with the database".

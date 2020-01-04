@@ -1,3 +1,5 @@
+package jira.post_functions
+
 //AUTHOR ALEX.K
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue

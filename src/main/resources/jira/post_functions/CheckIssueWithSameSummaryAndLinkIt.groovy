@@ -1,4 +1,4 @@
-package jira.postfunctions
+package jira.post_functions
 
 import com.atlassian.jira.bc.issue.search.SearchService
 import com.atlassian.jira.component.ComponentAccessor

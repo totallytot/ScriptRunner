@@ -1,18 +1,16 @@
+package jira.post_functions
+
 // Author: V.Bykouski
+
 import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.issue.MutableIssue
-import com.atlassian.jira.workflow.TransitionOptions.Builder
-import groovy.json.JsonBuilder
-import groovy.transform.BaseScript
-import groovyx.net.http.HTTPBuilder
-import static groovyx.net.http.ContentType.*
-import static groovyx.net.http.Method.*
 import com.atlassian.jira.issue.customfields.option.LazyLoadedOption
 import com.atlassian.jira.user.DelegatingApplicationUser
-import org.apache.log4j.Logger
+import groovyx.net.http.HTTPBuilder
 import org.apache.log4j.Level
-import com.atlassian.jira.event.type.EventDispatchOption
+import org.apache.log4j.Logger
 
+import static groovyx.net.http.ContentType.JSON
+import static groovyx.net.http.Method.*
 
 def log = Logger.getLogger("com.acme.CreateSubtask")
 log.setLevel(Level.DEBUG)

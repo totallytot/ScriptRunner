@@ -1,4 +1,4 @@
-package jira.postfunctions
+package jira.post_functions
 
 def url = new URL('http:// урл бамбу/rest/api/latest/queue/ключ плана')
 HttpURLConnection connection = (HttpURLConnection) url.openConnection()

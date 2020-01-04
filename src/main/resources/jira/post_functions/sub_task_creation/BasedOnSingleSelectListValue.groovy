@@ -1,4 +1,4 @@
-package jira.postfunctions.sub_task_creation
+package jira.post_functions.sub_task_creation
 
 import com.atlassian.jira.component.ComponentAccessor
 
