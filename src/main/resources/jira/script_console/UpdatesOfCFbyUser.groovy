@@ -1,4 +1,4 @@
-package jira.scriptconsole
+package jira.script_console
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
