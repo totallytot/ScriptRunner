@@ -1,7 +1,7 @@
-package jira.RESTendpoints
+package jira.REST_endpoints
 /*
 Select List Conversions
-https://scriptrunner.adaptavist.com/5.6.1/jira/behaviours-conversions.html
+https://scriptrunner.adaptavist.com/5.6.15/jira/behaviours-conversions.html
  */
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.config.database.DatabaseConfigurationManager
@@ -17,11 +17,10 @@ import javax.ws.rs.core.Response
 import java.sql.Driver
 
 @BaseScript CustomEndpointDelegate delegate
-
-clientPXG(httpMethod: "GET") { MultivaluedMap queryParams ->
+// groups: ["jira-software-users"] is used to disable anonymous access
+clientPXG(httpMethod: "GET", groups: ["jira-software-users"]) { MultivaluedMap queryParams ->
     def query = queryParams.getFirst("query") as String
     def output = [:]
-
     def datasource = ComponentAccessor.getComponent(DatabaseConfigurationManager).getDatabaseConfiguration().getDatasource() as JdbcDatasource
     def driver = Class.forName(datasource.getDriverClassName()).newInstance() as Driver
     def properties = new Properties()
@@ -37,7 +36,7 @@ clientPXG(httpMethod: "GET") { MultivaluedMap queryParams ->
                 items : rows.collect { GroovyRowResult row ->
                     [
                             value: row.get("stringvalue"),
-                            html : row.get("stringvalue").toString().replaceAll(/(?i)$query/) { "<b>${it}</b>" },
+                            html : row.get("stringvalue").toString().replaceAll(/(?i)$query/) { String item -> "<b>${item}</b>" },
                             label: row.get("stringvalue"),
                     ]
                 },
