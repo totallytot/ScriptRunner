@@ -76,6 +76,11 @@
             <artifactId>http-builder</artifactId>
             <version>0.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>3.6.00</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.atlassian.jira.plugins/jira-greenhopper-plugin -->
         <dependency>
             <groupId>com.atlassian.jira.plugins</groupId>
