@@ -2,7 +2,7 @@ package jira_cloud
 
 import kong.unirest.Unirest
 
-static def getIssue(issueKey) {
+static Map getIssue(issueKey) {
     Unirest.get("/rest/api/2/issue/${issueKey}").asObject(Map).body
 }
 
@@ -35,4 +35,16 @@ static def updateSelectListField(issue, customfield_id, value) {
                         ]
                 ]).asString()
     }
+}
+
+static updateTextField(issue, customfield_id, value) {
+    Unirest.put("/rest/api/2/issue/${issue.key}")
+            .queryString("overrideScreenSecurity", Boolean.TRUE)
+            .queryString("notifyUsers", Boolean.TRUE)
+            .header("Content-Type", "application/json")
+            .body([
+                    fields:[
+                            (customfield_id):value
+                    ]
+            ]).asString()
 }
