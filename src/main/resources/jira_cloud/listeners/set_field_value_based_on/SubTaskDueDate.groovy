@@ -11,10 +11,10 @@ if (issueLink.issueLinkType.name.toString() == "jira_subtask_link" && issue.fiel
     def subtasks = issue.fields.subtasks.key as List
     if (!subtasks.isEmpty()) {
         def value = new StringBuilder()
-        value.append("${issue.key} ${-> issue.fields.summary} ${-> issue.fields.duedate}\n")
+        value.append("${issue.key} ${-> issue.fields.issuetype.name} ${-> issue.fields.duedate}\n")
         subtasks.each {
             def subtask = getIssue(it)
-            value.append("${subtask.key} ${-> subtask.fields.summary} ${-> subtask.fields.duedate}\n")
+            value.append("${subtask.key} ${-> subtask.fields.issuetype.name} ${-> subtask.fields.duedate}\n")
         }
         def customFields = Unirest.get("/rest/api/2/field").asObject(List).body.findAll { (it as Map).custom } as List<Map>
         def customFieldId = customFields.find { it.name == "Sub Tasks Due Dates" }?.id
@@ -25,7 +25,6 @@ if (issueLink.issueLinkType.name.toString() == "jira_subtask_link" && issue.fiel
 
 static Map getIssue(issueKey) {
     Unirest.get("/rest/api/2/issue/${issueKey}").asObject(Map).body
-
 }
 
 static updateTextField(issue, customfield_id, value) {

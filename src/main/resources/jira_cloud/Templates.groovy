@@ -28,6 +28,7 @@ static def updateSelectListField(issue, customfield_id, value) {
     if (optionId) {
         Unirest.put("/rest/api/2/issue/${issue.key}")
                 .queryString("overrideScreenSecurity", Boolean.TRUE)
+                .queryString("notifyUsers", Boolean.FALSE)
                 .header("Content-Type", "application/json")
                 .body([
                         fields: [
@@ -40,11 +41,22 @@ static def updateSelectListField(issue, customfield_id, value) {
 static updateTextField(issue, customfield_id, value) {
     Unirest.put("/rest/api/2/issue/${issue.key}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
-            .queryString("notifyUsers", Boolean.TRUE)
+            .queryString("notifyUsers", Boolean.FALSE)
             .header("Content-Type", "application/json")
-            .body([
-                    fields:[
-                            (customfield_id):value
-                    ]
-            ]).asString()
+            .body([fields:[(customfield_id):value]]).asString()
+}
+
+static setDueDate(issue, String date) {
+    //yyyy-MM-dd
+    Unirest.put("/rest/api/2/issue/${issue.key}")
+            .header('Content-Type', 'application/json')
+            .queryString("notifyUsers", Boolean.FALSE)
+            .body([fields:[duedate:date]]).asString()
+
+}
+
+static addComment(issue, commentBody) {
+    Unirest.post("/rest/api/2/issue/${issue.key}/comment")
+            .header('Content-Type', 'application/json')
+            .body([body:commentBody]).asObject(Map)
 }
