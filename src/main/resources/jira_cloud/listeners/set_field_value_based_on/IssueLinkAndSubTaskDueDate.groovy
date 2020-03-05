@@ -32,9 +32,5 @@ static updateTextField(issue, customfield_id, value) {
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.TRUE)
             .header("Content-Type", "application/json")
-            .body([
-                    fields:[
-                            (customfield_id):value
-                    ]
-            ]).asString()
+            .body([fields:[(customfield_id):value]]).asString()
 }

@@ -32,5 +32,4 @@ static setDueDate(issue, String date) {
             .header('Content-Type', 'application/json')
             .queryString("notifyUsers", Boolean.FALSE)
             .body([fields:[duedate:date]]).asString()
-
 }

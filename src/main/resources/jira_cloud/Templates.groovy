@@ -21,7 +21,7 @@ static List getComments(issue) {
 def customFields = Unirest.get("/rest/api/2/field").asObject(List).body.findAll { (it as Map).custom } as List<Map>
 def customFieldId = customFields.find { it.name == "fieldName" }?.id
 
-static def updateSelectListField(issue, customfield_id, value) {
+static def setSelectListField(issue, customfield_id, value) {
     def optionId = get("/rest/api/2/issue/${issue.key}/editmeta")
             .header('Content-Type', 'application/json').asObject(Map)
             .body.fields[customfield_id]?.allowedValues?.find { it.value == value}?.id
@@ -38,7 +38,7 @@ static def updateSelectListField(issue, customfield_id, value) {
     }
 }
 
-static updateTextField(issue, customfield_id, value) {
+static setTextField(issue, customfield_id, value) {
     Unirest.put("/rest/api/2/issue/${issue.key}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.FALSE)
@@ -59,4 +59,10 @@ static addComment(issue, commentBody) {
     Unirest.post("/rest/api/2/issue/${issue.key}/comment")
             .header('Content-Type', 'application/json')
             .body([body:commentBody]).asObject(Map)
+}
+
+static def getCustomFieldValue(issue, customfield_id) {
+    Unirest.get("/rest/api/2/issue/${issue.key}?fields=${customfield_id}")
+            .header('Content-Type', 'application/json')
+            .asObject(Map).body.fields[customfield_id]
 }
