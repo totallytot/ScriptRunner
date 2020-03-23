@@ -48,3 +48,11 @@ static updateMultiUserPicker(ApplicationUser executionUser, Issue issue, String 
     if (validationResult.valid) issueService.update(executionUser, validationResult)
     else validationResult.errorCollection
 }
+
+static clearAssignee(Issue issue) {
+    def user = ComponentAccessor.userManager.getUserByName("service_account")
+    def issueService = ComponentAccessor.issueService
+    def validateAssignResult = issueService.validateAssign(user, issue.id, null)
+    if (validateAssignResult.valid) issueService.assign(user, validateAssignResult)
+    validateAssignResult.errorCollection
+}
