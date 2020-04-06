@@ -1,4 +1,4 @@
-package jira.RESTendpoints
+package jira.REST_endpoints
 /*
 Select List Conversions
 https://scriptrunner.adaptavist.com/5.6.1/jira/behaviours-conversions.html
@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response
 bitbucketProjects(httpMethod: "GET") { MultivaluedMap queryParams -> 
 
     def query = queryParams.getFirst("query") as String
-	def baseURL = ...
+	def baseURL = ""
     def rt = [:]
     if (query) {
         def url = "${baseURL}/rest/api/1.0/projects?name=${query}&limit=1000"

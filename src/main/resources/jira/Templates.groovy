@@ -11,8 +11,8 @@ import com.atlassian.jira.web.bean.PagerFilter
 
 def issue = ComponentAccessor.issueManager.getIssueObject(" ")
 
-static def getCustomFieldValue(String customFieldName, Issue issue) {
-    ComponentAccessor.customFieldManager.getCustomFieldObjects(issue).find { it.name == customFieldName }.getValue(issue)
+static getCustomFieldValue(String customFieldName, Issue issue) {
+    ComponentAccessor.customFieldManager.getCustomFieldObjects(issue).find { it.name == customFieldName }?.getValue(issue)
 }
 
 static List<Issue> getIssuesFromJql(ApplicationUser executionUser, String jql) {
@@ -40,9 +40,8 @@ static updateIssueLabels(ApplicationUser executionUser, String label, Issue issu
 static updateMultiUserPicker(ApplicationUser executionUser, Issue issue, String fieldName, String... userKeys) {
     def multiUserPicker = ComponentAccessor.customFieldManager.getCustomFieldObject(fieldName)
     def issueService = ComponentAccessor.issueService
-    def issueInputParameters = issueService.newIssueInputParameters().with {
-        addCustomFieldValue(multiUserPicker.id, userKeys).setSkipScreenCheck(true)
-    } as IssueInputParameters
+    def issueInputParameters = issueService.newIssueInputParameters()
+    issueInputParameters.addCustomFieldValue(multiUserPicker.id, userKeys).setSkipScreenCheck(true)
     IssueService.UpdateValidationResult validationResult = issueService.validateUpdate(executionUser,
             issue.id, issueInputParameters)
     if (validationResult.valid) issueService.update(executionUser, validationResult)
