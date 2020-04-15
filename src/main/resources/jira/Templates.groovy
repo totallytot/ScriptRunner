@@ -4,7 +4,6 @@ import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.bc.issue.search.SearchService
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
-import com.atlassian.jira.issue.IssueInputParameters
 import com.atlassian.jira.issue.label.LabelManager
 import com.atlassian.jira.user.ApplicationUser
 import com.atlassian.jira.web.bean.PagerFilter

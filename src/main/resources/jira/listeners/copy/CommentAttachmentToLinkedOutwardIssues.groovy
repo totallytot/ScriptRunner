@@ -1,4 +1,4 @@
-package jira.listeners
+package jira.listeners.copy
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.MutableIssue
