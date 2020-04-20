@@ -5,6 +5,7 @@ import com.atlassian.jira.component.ComponentAccessor
 import java.text.SimpleDateFormat
 
 def issue = event.issue
+if (issue.issueType.name != "Task") return
 log.info "Working with ${issue}"
 def actualStartDate = ComponentAccessor.customFieldManager.getCustomFieldObjects(issue).find {
     it.name == "Actual Start Date" }
