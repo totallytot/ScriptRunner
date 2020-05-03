@@ -19,6 +19,10 @@
             <id>adaptavist.public</id>
             <url>https://nexus.adaptavist.com/content/repositories/external/</url>
         </repository>
+        <repository>
+            <id>riada</id>
+            <url>https://repo.riada.io/repository/riada-repo/</url>
+        </repository>
     </repositories>
 
     <name>scripts-repository</name>
@@ -36,6 +40,11 @@
             <artifactId>jira-core</artifactId>
             <version>${jira.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.servicedesk</groupId>
+            <artifactId>jira-servicedesk-api</artifactId>
+            <version>${servicedesk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -72,6 +81,13 @@
             <version>${scriptrunner.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.riadalabs.jira.plugins</groupId>
+            <artifactId>insight</artifactId>
+            <version>${insight.version}</version>
+            <classifier>api</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.groovy.modules.http-builder</groupId>
             <artifactId>http-builder</artifactId>
             <version>0.6</version>
@@ -93,8 +109,10 @@
         <jira.version>8.3.2</jira.version>
         <confluence.version>6.15.3</confluence.version>
         <agile.version>6.7.4</agile.version>
+        <servicedesk.version>4.0.2-REL-0002</servicedesk.version>
         <groovy.version>2.4.16</groovy.version>
         <atlassian.spring.scanner.version>2.1.10</atlassian.spring.scanner.version>
         <scriptrunner.version>5.6.1.1-jira8</scriptrunner.version>
+        <insight.version>8.4.4</insight.version>
     </properties>
 </project>
