@@ -55,7 +55,7 @@ if (!serviceForUpdate.empty) {
 }
 
 def contractMailVal = body.find(contractPattern)?.trim()
-def iqlContract = """objectType = Компания AND Номер = ${contractMailVal}"""
+def iqlContract = """objectType = Контракт AND Номер = ${contractMailVal}"""
 def contracts = iqlFacade.findObjects(iqlContract)
 if (!contracts.empty) {
     def contractInsightCF = ComponentAccessor.customFieldManager.getCustomFieldObject(10268)
