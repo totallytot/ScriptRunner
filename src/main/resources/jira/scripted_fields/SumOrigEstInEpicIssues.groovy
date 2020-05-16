@@ -9,4 +9,4 @@ def epicIssues = ComponentAccessor.issueLinkManager.getOutwardLinks(issue.id)
 if (epicIssues.empty) return
 return epicIssues
         .findAll { it.originalEstimate != null }
-        .collect { it.originalEstimate}.sum()
+        .collect { it.originalEstimate }.sum()

@@ -1,6 +1,5 @@
 package jira.validators
 
-import com.atlassian.jira.component.ComponentAccessor
 import webwork.action.ActionContext
 import com.opensymphony.workflow.InvalidInputException
 
