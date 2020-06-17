@@ -3,6 +3,7 @@ package jira
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.bc.issue.search.SearchService
 import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.event.type.EventDispatchOption
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.MutableIssue
 import com.atlassian.jira.issue.fields.CustomField
@@ -38,7 +39,41 @@ class JiraUtilHelper {
                 findAll { it.issueLinkType.name == "Epic-Story Link" }*.destinationObject
     }
 
-    static Object setSingleSelectListValue(Issue issue, String value, CustomField customField, ApplicationUser executionUser) {
+    static def setPriority(ApplicationUser executionUser, MutableIssue issue, String priorityName, Boolean sendEventAndEmail) {
+        def priorityToSetId = ComponentAccessor.constantsManager.priorities.find { it.name == priorityName }?.id
+        if (!priorityToSetId) return "No such priority"
+        if (sendEventAndEmail) {
+            def issueService = ComponentAccessor.issueService
+            def issueInputParameters = issueService.newIssueInputParameters()
+            issueInputParameters.with {
+                setSkipScreenCheck(true)
+                setPriorityId(priorityToSetId)
+            }
+            IssueService.UpdateValidationResult validationResult = issueService
+                    .validateUpdate(executionUser, issue.id, issueInputParameters)
+            if (validationResult.valid) issueService.update(executionUser, validationResult)
+            else validationResult.errorCollection
+        } else {
+            issue.setPriorityId(priorityToSetId)
+            ComponentAccessor.issueManager.updateIssue(executionUser, issue,
+                    EventDispatchOption.DO_NOT_DISPATCH, false)
+        }
+    }
+
+    static def setNumberFieldValue(ApplicationUser executionUser, Issue issue, CustomField customField, Number value) {
+        def issueService = ComponentAccessor.issueService
+        def issueInputParameters = issueService.newIssueInputParameters()
+        issueInputParameters.with {
+            setSkipScreenCheck(true)
+            addCustomFieldValue(customField.idAsLong, value as String)
+        }
+        IssueService.UpdateValidationResult validationResult = issueService
+                .validateUpdate(executionUser, issue.id, issueInputParameters)
+        if (validationResult.valid) issueService.update(executionUser, validationResult)
+        else validationResult.errorCollection
+    }
+
+    static def setSingleSelectListValue(Issue issue, String value, CustomField customField, ApplicationUser executionUser) {
         def optionToSelect = ComponentAccessor.optionsManager.getOptions(customField.getRelevantConfig(issue))
                 .find { it.value == value }
         def issueService = ComponentAccessor.issueService
