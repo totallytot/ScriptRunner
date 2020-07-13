@@ -60,6 +60,19 @@ class JiraUtilHelper {
         }
     }
 
+    static def setFixVersions(ApplicationUser executionUser, MutableIssue issue, Long ... versionIds) {
+        def issueService = ComponentAccessor.issueService
+        def issueInputParameters = issueService.newIssueInputParameters()
+        issueInputParameters.with {
+            setSkipScreenCheck(true)
+            setFixVersionIds(versionIds)
+        }
+        IssueService.UpdateValidationResult validationResult = issueService
+                .validateUpdate(executionUser, issue.id, issueInputParameters)
+        if (validationResult.valid) issueService.update(executionUser, validationResult)
+        else validationResult.errorCollection
+    }
+
     static def setNumberFieldValue(ApplicationUser executionUser, Issue issue, CustomField customField, Number value) {
         def issueService = ComponentAccessor.issueService
         def issueInputParameters = issueService.newIssueInputParameters()
