@@ -10,9 +10,9 @@ import com.atlassian.plugin.osgi.container.OsgiContainerManager
 import com.atlassian.spring.container.ContainerManager
 import com.atlassian.confluence.api.model.content.Content
 
-final int MAX_ENTITIES = 500
 final String CQL_QUERY = 'type = page and lastModified > "2020/07/15"'
-final String LABEL_VALUE = "old_content_test"
+final String LABEL_VALUE = "content_page"
+final int MAX_ENTITIES = 500
 
 def osgiContainerManager = ContainerManager.getComponent("osgiContainerManager") as OsgiContainerManager
 def cqlSearchService = osgiContainerManager.getServiceTracker(CQLSearchService.class.name).service as CQLSearchService

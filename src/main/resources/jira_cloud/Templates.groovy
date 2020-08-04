@@ -66,3 +66,12 @@ static def getCustomFieldValue(issue, customfield_id) {
             .header('Content-Type', 'application/json')
             .asObject(Map).body.fields[customfield_id]
 }
+
+static List executeSearch(String jqlQuery, int startAt, int maxResults) {
+    def searchRequest = Unirest.get("/rest/api/2/search")
+            .queryString("jql", jqlQuery)
+            .queryString("startAt", startAt)
+            .queryString("maxResults", maxResults)
+            .asObject(Map)
+    searchRequest.status == 200 ? searchRequest.body.issues as List : null
+}

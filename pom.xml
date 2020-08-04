@@ -58,10 +58,12 @@
             <version>${confluence.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.atlassian.plugin</groupId>
@@ -110,7 +112,7 @@
         <confluence.version>6.15.3</confluence.version>
         <agile.version>6.7.4</agile.version>
         <servicedesk.version>4.0.2-REL-0002</servicedesk.version>
-        <groovy.version>2.4.16</groovy.version>
+        <groovy.version>2.5.13</groovy.version>
         <atlassian.spring.scanner.version>2.1.10</atlassian.spring.scanner.version>
         <scriptrunner.version>5.6.1.1-jira8</scriptrunner.version>
         <insight.version>8.4.4</insight.version>
