@@ -1,6 +1,7 @@
 package jira_cloud.scheduled_jobs
 
 import kong.unirest.Unirest
+import java.text.NumberFormat
 
 //def requestFields = Unirest.get("/rest/api/2/field").asObject(List)
 //assert requestFields.status == 200
@@ -18,7 +19,7 @@ int startAt, jqlOutputItemsCount
 def maxResults = 100
 def searchResult = []
 
-// workaround for old Groovy version
+// workaround for old Groovy version w/t do-while
 def keepSearchGoing = true
 while (keepSearchGoing) {
     def searchIntermediateResult = executeJqlSearch(jqlQuery, startAt, maxResults)
@@ -31,12 +32,22 @@ while (keepSearchGoing) {
 searchResult.each { item ->
     def issue = item as Map
     def votes = issue.fields.votes.votes as Integer
-    def requestCountVal = issue.fields["${requestCountCfId}"] as Integer
-    def calculatedRankVal = (requestCountVal * 0.4 + votes * 0.6) as Integer
+    if (!votes) votes = 0
+    def requestCountVal = issue.fields["${requestCountCfId}"] as Double
+    if (!requestCountVal) requestCountVal= 0
+    def calculatedRankVal = (requestCountVal * 0.4 + votes * 0.6) as Double
     logger.info "Actual calculatedRank value is ${calculatedRankVal}"
-    def currentCalculatedRankVal = issue.fields[calculatedRankCfId] as Integer
+
+    // formatting
+    def numberFormat = NumberFormat.instance
+    numberFormat.setMaximumFractionDigits(3)
+    numberFormat.setMinimumFractionDigits(1)
+    def calculatedRankValFormatted = Double.parseDouble(numberFormat.format(calculatedRankVal))
+    logger.info "Formatted Actual calculatedRank value is ${calculatedRankValFormatted}"
+
+    def currentCalculatedRankVal = issue.fields[calculatedRankCfId] as Double
     logger.info "Current calculatedRank value is ${currentCalculatedRankVal}"
-    def isUpdateRequired = (calculatedRankVal != currentCalculatedRankVal)
+    def isUpdateRequired = (calculatedRankValFormatted != currentCalculatedRankVal)
     logger.info "${issue.key} update: ${isUpdateRequired.toString()}"
     if (isUpdateRequired) {
         def result = Unirest.put("/rest/api/2/issue/${issue.key}")
