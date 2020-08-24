@@ -14,34 +14,42 @@ def currentVersionFieldVal = getCustomFieldValue("Current version", issue as Iss
 if (!currentVersionFieldVal) return "Unknown (Current Version is empty)"
 
 // find the most recent test run of this test
-def executionUser = ComponentAccessor.userManager.getUserByName("admin")
-def jql = "issuetype = 'Test Execution' and issue in testTestExecutions('${issue.key}') and fixVersion = '${currentVersionFieldVal.first().toString()}'"
+def executionUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
+def jql = """issuetype = 'Test Execution' and issue in testTestExecutions('${issue.key}') 
+and fixVersion = '${currentVersionFieldVal.first().toString()}' order by created"""
 def searchResult = getIssuesFromJql(executionUser, jql)
-searchResult.groupBy { it.created }
+if (searchResult.empty) return "JQL search result is empty"
 def latestTestExecution = searchResult.first()
 
 // REST
 def authString = "admin:TryHarder".bytes.encodeBase64().toString()
 def baseurl = ComponentAccessor.applicationProperties.getString("jira.baseurl")
+boolean isErrorResponse = false
 def http = new HTTPBuilder("${baseurl}/rest/raven/1.0/api/test/${issue.key}/testruns")
-def testRunData = null
-http.request(Method.GET, ContentType.JSON) { req ->
+def testRunData = http.request(Method.GET, ContentType.JSON) { req ->
     headers."Authorization" = "Basic ${authString}"
     response.success = { resp, reader ->
-        testRunData = reader.find {
-            it.testExecKey == latestTestExecution.key
-        }
+        assert resp.status == 200
+        def testExecutionData = reader.find { it.testExecKey == latestTestExecution.key }
+        if (!testExecutionData) {
+            isErrorResponse = true
+            return "Response status is ${resp.status}, but there is no match on Test Executions."
+        } else return testExecutionData
+    }
+    response.failure = { resp ->
+        isErrorResponse = true
+        return resp.statusLine
     }
 }
 
 // output
-if (!testRunData) return
+if (isErrorResponse) return testRunData
 def stringBuilder = new StringBuilder()
 stringBuilder.with {
     append("Latest Test Execution is ${testRunData.testExecKey}<br>")
     append("Id: ${testRunData.id}<br>")
     append("Status: ${testRunData.status}<br>")
-    append("Finished On: ${testRunData.finishedOn}")
+    append("Finished on: ${testRunData.finishedOn}")
 }
 return stringBuilder.toString()
 
