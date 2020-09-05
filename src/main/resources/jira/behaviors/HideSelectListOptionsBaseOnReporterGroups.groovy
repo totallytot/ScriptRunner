@@ -1,6 +1,10 @@
-package jira.behaviours
+package jira.behaviors
 
 import com.atlassian.jira.component.ComponentAccessor
+import com.onresolve.jira.groovy.user.FieldBehaviours
+import groovy.transform.BaseScript
+
+@BaseScript FieldBehaviours fieldBehaviours
 
 def group0 = "Группа архитектуры и эксплуатации сети"
 def allowedValues0 = ["Добавление / изменение DNS записи", "Монтаж оборудования",

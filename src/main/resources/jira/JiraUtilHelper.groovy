@@ -10,6 +10,8 @@ import com.atlassian.jira.issue.fields.CustomField
 import com.atlassian.jira.issue.label.LabelManager
 import com.atlassian.jira.user.ApplicationUser
 import com.atlassian.jira.web.bean.PagerFilter
+import com.atlassian.mail.Email
+import com.atlassian.mail.queue.SingleMailQueueItem
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
 
@@ -19,6 +21,11 @@ class JiraUtilHelper {
 
     static MutableIssue getIssue(String issueKey) {
         ComponentAccessor.issueManager.getIssueObject(issueKey)
+    }
+
+    static String getIssueUrl(String issueKey) {
+        def baseurl = ComponentAccessor.applicationProperties.getString("jira.baseurl")
+        return "${baseurl}/browse/${issueKey}"
     }
 
     static Object getCustomFieldValue(String customFieldName, Issue issue) {
@@ -128,5 +135,20 @@ class JiraUtilHelper {
         def validateAssignResult = issueService.validateAssign(user, issue.id, null)
         if (validateAssignResult.valid) issueService.assign(user, validateAssignResult)
         validateAssignResult.errorCollection
+    }
+
+    static boolean sendMail(String recipientAddress, String subject, String body) {
+        def mailServer = ComponentAccessor.mailServerManager.defaultSMTPMailServer
+        def wasAddedToQueue = false
+        if (mailServer) {
+            def mail = new Email(recipientAddress)
+            mail.setSubject(subject)
+            mail.setBody(body)
+            mail.setMimeType("text/html")
+            def item = new SingleMailQueueItem(mail)
+            ComponentAccessor.mailQueue.addItem(item)
+            wasAddedToQueue = true
+        }
+        return wasAddedToQueue
     }
 }

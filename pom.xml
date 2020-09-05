@@ -108,7 +108,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <jira.version>8.3.2</jira.version>
+        <jira.version>8.10.1</jira.version>
         <confluence.version>6.15.3</confluence.version>
         <agile.version>6.7.4</agile.version>
         <servicedesk.version>4.0.2-REL-0002</servicedesk.version>
