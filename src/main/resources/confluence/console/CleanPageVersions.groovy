@@ -1,4 +1,4 @@
-package confluence
+package confluence.console
 
 import com.atlassian.confluence.pages.Page
 import com.atlassian.confluence.pages.PageManager

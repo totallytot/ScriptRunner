@@ -17,6 +17,7 @@ IQLFacade iqlFacade
 @PluginModule
 ObjectFacade objectFacade
 
+def secondLineScreens = ["P9127152: Экран перехода на вторую линию"]
 def workingGroupField = getFieldByName("Рабочая группа")
 def groupResponsibleField = getFieldByName("Ответственный по группе")
 
@@ -36,7 +37,7 @@ def setGroupResponsible = {
     } else groupResponsibleField.setFormValue("")
 }
 
-if (getFieldScreen().name == "P9127152: Экран перехода на вторую линию") {
+if (getFieldScreen().name in secondLineScreens) {
     def insightCfVal = ComponentAccessor.customFieldManager.getCustomFieldObjects(underlyingIssue).
             find { it.name == "Услуга" }?.getValue(underlyingIssue) as String
     if (insightCfVal) {

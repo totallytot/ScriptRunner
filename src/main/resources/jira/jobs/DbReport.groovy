@@ -1,4 +1,4 @@
-package jira.services
+package jira.jobs
 
 import com.atlassian.jira.component.ComponentAccessor
 import groovy.sql.Sql
