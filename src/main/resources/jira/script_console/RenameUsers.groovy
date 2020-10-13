@@ -1,4 +1,4 @@
-package jira.scriptconsole
+package jira.script_console
 //can be used for bulk user renaming in JIRA internal dir
 
 import com.atlassian.crowd.embedded.impl.ImmutableUser
