@@ -38,6 +38,16 @@ import org.apache.log4j.Logger
  *  - link creation event between Epic and Theme;
  *  - link removal event between Epic and Theme;
  *  - sprint started, closed, updated.
+ *
+ *  Story calculation:
+ *  - get the earliest sprint start date and populate the Start Date field of the Story;
+ *  - get the latest sprint date and populate the End Date field of the Story.
+ * Triggers:
+ *  - sprint update in Story;
+ *  - sprint started, closed, updated.
+ *
+ *  EventDispatchOption is set to DO_NOT_DISPATCH due to the installed Big Picture app (it updates dates too)
+ *
  */
 
 @WithPlugin("com.pyxis.greenhopper.jira")
@@ -151,7 +161,32 @@ def epicStartEndDatesUpdate = { Issue epicIssue ->
         return false
 }
 
-// do calculation depending on the indicated trigger
+def storyStartEndDatesUpdate = { Issue storyIssue ->
+    def sprints = getCustomFieldValue("Sprint", storyIssue) as List<Sprint>
+    if (sprints.empty) return false
+    def actualSprints = sprints.findAll { it.state.toString() in ALLOWED_SPRINT_STATUSES }
+    if (actualSprints.empty) return false
+    def mutableStoryIssue = issueManager.getIssueObject(storyIssue.key)
+
+    actualSprints.sort { it.startDate }
+    def earliestSprintStartDate = actualSprints.first().startDate.toDate()
+    logger.debug "Story earliest start date: ${earliestSprintStartDate}"
+    if (earliestSprintStartDate) mutableStoryIssue.setCustomFieldValue(startDateCf, earliestSprintStartDate.toTimestamp())
+
+    def completeAndEndDates = actualSprints.findResults { Sprint sprint ->
+        if (!sprint.completeDate) sprint.endDate
+        else sprint.completeDate
+    }
+    def latestSprintEndDate = completeAndEndDates.sort().last().toDate()
+    logger.debug "Story latest end date: ${latestSprintEndDate}"
+    if (latestSprintEndDate) mutableStoryIssue.setCustomFieldValue(endDateCf, latestSprintEndDate.toTimestamp())
+    if (earliestSprintStartDate || latestSprintEndDate) {
+        issueManager.updateIssue(executionUser, mutableStoryIssue, EventDispatchOption.DO_NOT_DISPATCH, false)
+        return true
+    } else return false
+}
+
+//do calculation depending on the indicated trigger
 if (triggerIssueLink) {
     def linkName = triggerIssueLink.issueLinkType.name
     logger.debug "Triggered by issue link update: ${linkName}"
@@ -180,6 +215,8 @@ if (triggerIssueLink) {
     def changeItems = issueEvent.changeLog.getRelated("ChildChangeItem")
     if (!changeItems?.any { it.field.toString().equalsIgnoreCase("sprint") }) return
     logger.debug "Triggered by issue sprint update in ${issueEvent.issue.key}"
+    // recalculate and update Story start/end dates
+    if (triggerIssue.issueType.name == "Story") storyStartEndDatesUpdate(triggerIssue)
     // recalculate and update Epic start/end dates
     def epicIssue = issueLinkManager.getInwardLinks(issueEvent.issue.id).
             find { it.issueLinkType.name == "Epic-Story Link" }?.sourceObject
@@ -202,21 +239,30 @@ if (triggerIssueLink) {
     //noinspection GroovyVariableNotAssigned
     def sprintIssues = sprintIssueService.getIssuesForSprint(executionUser, triggerSprint).value
     if (sprintIssues.empty) return
-    def allowedSprintIssues = sprintIssues.findAll { Issue issue ->
+    def allowedSprintIssues = sprintIssues.findAll {  Issue issue ->
         issue.issueType.name in ALLOWED_ISSUE_TYPES_IN_EPIC
     } as List<Issue>
+    //update of all story issues related to the sprint
+    def stories = allowedSprintIssues.findAll { it.issueType.name == "Story" }
+    if (!stories.empty) {
+        stories.each { Issue story ->
+            storyStartEndDatesUpdate(story)
+        }
+    }
+    //update of all epic issues related to the sprint
     def epics = allowedSprintIssues.findResults { Issue issue ->
         issueLinkManager.getInwardLinks(issue.id).
                 find { it.issueLinkType.name == "Epic-Story Link" }?.sourceObject
     }
-    if (epics.empty) return
-    logger.debug "Epics from sprint ${epics*.key}"
-    epics.each { Issue epicIssue ->
-        def wasEpicUpdated = epicStartEndDatesUpdate(epicIssue)
-        if (wasEpicUpdated) {
-            def themeIssue = issueLinkManager.getOutwardLinks(epicIssue.id).
-                    find { it.issueLinkType.name == "Theme" }?.destinationObject
-            if (themeIssue) themeStartEndDatesUpdate(themeIssue)
+    if (!epics.empty) {
+        logger.debug "Epics from sprint ${epics*.key}"
+        epics.each { Issue epicIssue ->
+            def wasEpicUpdated = epicStartEndDatesUpdate(epicIssue)
+            if (wasEpicUpdated) {
+                def themeIssue = issueLinkManager.getOutwardLinks(epicIssue.id).
+                        find { it.issueLinkType.name == "Theme" }?.destinationObject
+                if (themeIssue) themeStartEndDatesUpdate(themeIssue)
+            }
         }
     }
 }
