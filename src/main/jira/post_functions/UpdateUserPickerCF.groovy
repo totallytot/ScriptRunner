@@ -1,3 +1,5 @@
+package jira.post_functions
+
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.user.ApplicationUser

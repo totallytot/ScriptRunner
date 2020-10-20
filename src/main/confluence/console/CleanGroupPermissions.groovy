@@ -1,3 +1,5 @@
+package confluence.console
+
 import com.atlassian.confluence.internal.security.SpacePermissionContext
 import com.atlassian.confluence.internal.security.SpacePermissionManagerInternal
 import com.atlassian.confluence.security.SpacePermission

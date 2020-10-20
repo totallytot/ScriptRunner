@@ -1,3 +1,5 @@
+package jira_cloud.listeners.set_field_value_based_on
+
 logger.info("Working with ${issue.key}")
 
 // find field id

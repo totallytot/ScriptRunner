@@ -1,3 +1,5 @@
+package confluence.console
+
 import com.atlassian.user.UserManager
 import com.atlassian.sal.api.component.ComponentLocator
 import com.atlassian.confluence.user.UserAccessor

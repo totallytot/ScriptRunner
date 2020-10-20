@@ -1,3 +1,5 @@
+package jira.conditions
+
 import JiraUtilHelper
 
 def insightCfVal = JiraUtilHelper.getCustomFieldValue("Подразделение", issue) as String

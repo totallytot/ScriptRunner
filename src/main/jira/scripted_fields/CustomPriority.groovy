@@ -1,3 +1,5 @@
+package jira.scripted_fields
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def customFieldObjects = ComponentAccessor.customFieldManager.getCustomFieldObjects(issue)

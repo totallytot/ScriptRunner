@@ -1,3 +1,5 @@
+package jira_cloud.listeners.set_field_value_based_on
+
 import kong.unirest.Unirest
 
 def sourceIssueResponse = Unirest.get("/rest/api/2/issue/${issueLink.sourceIssueId}").asObject(Map)

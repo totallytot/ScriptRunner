@@ -1,3 +1,5 @@
+package jira.validators
+
 import com.atlassian.jira.component.ComponentAccessor
 /*
 issue type creation depending on group membership

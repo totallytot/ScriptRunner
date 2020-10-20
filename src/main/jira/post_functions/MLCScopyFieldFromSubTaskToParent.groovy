@@ -1,3 +1,5 @@
+package jira.post_functions
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.ModifiedValue
 import com.atlassian.jira.issue.customfields.option.LazyLoadedOption

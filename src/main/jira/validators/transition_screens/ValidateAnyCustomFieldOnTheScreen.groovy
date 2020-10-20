@@ -1,3 +1,5 @@
+package jira.validators.transition_screens
+
 import webwork.action.ActionContext
 import com.opensymphony.workflow.InvalidInputException
 

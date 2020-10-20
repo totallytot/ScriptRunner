@@ -1,3 +1,5 @@
+package jira.listeners
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.event.issue.IssueEvent
 import com.atlassian.jira.issue.label.LabelManager

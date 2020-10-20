@@ -1,9 +1,11 @@
+package jira.REST_endpoints.reports_with_gui
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.onresolve.scriptrunner.runner.rest.common.CustomEndpointDelegate
 import groovy.json.JsonSlurper
 import groovy.transform.BaseScript
-import JiraUtilHelper
-import ReportGenerator
+import jira.JiraUtilHelper
+import jira.ReportGenerator
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 

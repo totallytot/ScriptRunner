@@ -1,3 +1,5 @@
+package jira.post_functions.create_issue
+
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
 

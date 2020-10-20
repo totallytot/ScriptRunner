@@ -1,3 +1,5 @@
+package jira_cloud.post_functions
+
 def customFields = get("/rest/api/2/field")
         .asObject(List)
         .body

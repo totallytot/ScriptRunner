@@ -1,3 +1,5 @@
+package jira
+
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.bc.issue.search.SearchService
 import com.atlassian.jira.component.ComponentAccessor

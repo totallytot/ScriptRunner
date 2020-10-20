@@ -1,3 +1,5 @@
+package jira.conditions
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def issue = ComponentAccessor.issueManager.getIssueObject(" ") //for testing in script console only

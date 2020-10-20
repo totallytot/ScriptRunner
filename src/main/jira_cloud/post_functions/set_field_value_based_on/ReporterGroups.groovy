@@ -1,3 +1,4 @@
+package jira_cloud.post_functions.set_field_value_based_on
 // condition that starts script if the field is empty
 def value = issue.fields["customfield_10036"] as String
 return value == null

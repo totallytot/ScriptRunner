@@ -1,3 +1,5 @@
+package jira.REST_endpoints
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.config.database.DatabaseConfigurationManager
 import com.atlassian.jira.config.database.JdbcDatasource

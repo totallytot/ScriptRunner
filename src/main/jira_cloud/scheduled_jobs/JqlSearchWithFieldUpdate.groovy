@@ -1,3 +1,5 @@
+package jira_cloud.scheduled_jobs
+
 import kong.unirest.Unirest
 import java.text.NumberFormat
 

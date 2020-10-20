@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.changehistory.ChangeHistoryItem

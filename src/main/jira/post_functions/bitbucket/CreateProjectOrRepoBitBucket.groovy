@@ -1,3 +1,5 @@
+package jira.post_functions.bitbucket
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.customfields.option.LazyLoadedOption
 import com.atlassian.jira.user.DelegatingApplicationUser

@@ -1,3 +1,5 @@
+package jira.validators
+
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
 import com.atlassian.jira.component.ComponentAccessor

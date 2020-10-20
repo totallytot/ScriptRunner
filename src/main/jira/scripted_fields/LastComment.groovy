@@ -1,3 +1,4 @@
+package jira.scripted_fields
 //Script Location: Sript Field
 //Shows last comment for each JIRA issue. Usefull in search for issues.
 //String output was rendered to wiki.

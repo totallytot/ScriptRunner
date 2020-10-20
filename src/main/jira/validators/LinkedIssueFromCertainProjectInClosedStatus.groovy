@@ -1,3 +1,5 @@
+package jira.validators
+
 import com.atlassian.jira.component.ComponentAccessor
 
 //On the project HEPROD - allow HEC Request to progress 'To Approval' Only if it has a linked HEC Request.

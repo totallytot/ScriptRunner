@@ -1,3 +1,5 @@
+package jira.jobs
+
 import com.atlassian.jira.component.ComponentAccessor
 import groovy.sql.Sql
 import org.ofbiz.core.entity.ConnectionFactory

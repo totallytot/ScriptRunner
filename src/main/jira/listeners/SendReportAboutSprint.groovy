@@ -1,3 +1,5 @@
+package jira.listeners
+
 import com.atlassian.mail.Email
 import com.atlassian.jira.bc.issue.search.SearchService
 import com.atlassian.jira.jql.parser.JqlQueryParser

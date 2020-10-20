@@ -1,3 +1,5 @@
+package jira.validators
+
 import com.opensymphony.workflow.InvalidInputException
 
 def conditionSummary = "Code review for ${issue.key}"

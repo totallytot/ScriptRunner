@@ -1,3 +1,5 @@
+package jira.post_functions.watchers
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def actualWatchers = []

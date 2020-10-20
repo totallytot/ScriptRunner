@@ -1,3 +1,5 @@
+package jira.listeners
+
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.component.ComponentAccessor
 

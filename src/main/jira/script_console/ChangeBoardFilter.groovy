@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.greenhopper.manager.rapidview.RapidViewManager
 import com.atlassian.greenhopper.model.rapid.RapidView
 import com.onresolve.scriptrunner.runner.customisers.JiraAgileBean

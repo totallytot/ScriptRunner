@@ -1,3 +1,5 @@
+package jira.scripted_fields.xray
+
 import com.atlassian.jira.bc.issue.search.SearchService
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue

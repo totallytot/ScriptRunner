@@ -1,3 +1,5 @@
+package jira_cloud.post_functions
+
 logger.info("Working with ${issue.key}")
 
 // get fields and find id

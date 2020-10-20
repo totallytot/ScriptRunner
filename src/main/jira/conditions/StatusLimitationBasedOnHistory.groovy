@@ -1,3 +1,5 @@
+package jira.conditions
+
 import com.atlassian.jira.component.ComponentAccessor
 
 /**Used for status limitation on "Allow all transitions" transition.

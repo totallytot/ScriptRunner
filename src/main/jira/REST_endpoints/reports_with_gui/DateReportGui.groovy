@@ -1,3 +1,5 @@
+package jira.REST_endpoints.reports_with_gui
+
 import com.onresolve.scriptrunner.runner.rest.common.CustomEndpointDelegate
 import groovy.transform.BaseScript
 import com.atlassian.jira.component.ComponentAccessor

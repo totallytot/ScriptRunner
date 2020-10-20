@@ -1,3 +1,5 @@
+package jira.validators
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.fields.CustomField
 

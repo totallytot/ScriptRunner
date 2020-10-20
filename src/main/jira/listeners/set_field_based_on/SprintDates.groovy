@@ -1,3 +1,5 @@
+package jira.listeners.set_field_based_on
+
 import com.atlassian.greenhopper.api.events.sprint.SprintClosedEvent
 import com.atlassian.greenhopper.api.events.sprint.SprintStartedEvent
 import com.atlassian.greenhopper.api.events.sprint.SprintUpdatedEvent

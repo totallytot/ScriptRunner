@@ -1,3 +1,5 @@
+package jira.listeners.sync
+
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.MutableIssue

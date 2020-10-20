@@ -1,3 +1,5 @@
+package jira_cloud.script_console
+
 def issueKey = "JPFCC-1"
 def issue = get('/rest/api/2/issue/' + issueKey).asObject(Map).body
 

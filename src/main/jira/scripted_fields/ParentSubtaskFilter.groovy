@@ -1,3 +1,5 @@
+package jira.scripted_fields
+
 def parentIssue = issue.getParentObject();
 def parentIssueKey, issueKey;
 

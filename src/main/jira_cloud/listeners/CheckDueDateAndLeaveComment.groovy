@@ -1,3 +1,5 @@
+package jira_cloud.listeners
+
 import kong.unirest.Unirest
 
 logger.info("Working with ${issue.key}")

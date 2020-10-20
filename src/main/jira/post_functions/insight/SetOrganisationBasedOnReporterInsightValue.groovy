@@ -1,3 +1,5 @@
+package jira.post_functions.insight
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.event.type.EventDispatchOption
 import com.atlassian.servicedesk.api.organization.OrganizationService

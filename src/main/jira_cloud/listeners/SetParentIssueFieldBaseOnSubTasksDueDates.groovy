@@ -1,3 +1,5 @@
+package jira_cloud.listeners
+
 import kong.unirest.Unirest
 
 def isSubTask = Boolean.parseBoolean(issue.fields.issuetype.subtask.toString())

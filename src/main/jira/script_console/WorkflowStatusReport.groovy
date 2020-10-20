@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.status.Status;
 List<String> statuses = new ArrayList<>();

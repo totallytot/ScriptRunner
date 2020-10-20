@@ -1,3 +1,5 @@
+package jira.listeners.set_field_based_on
+
 import JiraUtilHelper
 import com.atlassian.jira.component.ComponentAccessor
 

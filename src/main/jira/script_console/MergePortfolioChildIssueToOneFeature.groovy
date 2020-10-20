@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.bc.issue.IssueService
 import com.atlassian.jira.bc.issue.search.SearchService

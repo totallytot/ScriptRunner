@@ -1,3 +1,5 @@
+package jira.scripted_fields
+
 import groovy.xml.MarkupBuilder
 import groovyx.net.http.HTTPBuilder
 import static groovyx.net.http.Method.GET

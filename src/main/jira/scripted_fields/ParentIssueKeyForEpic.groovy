@@ -1,3 +1,5 @@
+package jira.scripted_fields
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.link.IssueLink

@@ -1,3 +1,5 @@
+package jira_cloud
+
 import kong.unirest.Unirest
 
 static Map getIssue(issueKey) {

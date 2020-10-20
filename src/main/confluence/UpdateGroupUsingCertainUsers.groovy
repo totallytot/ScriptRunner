@@ -1,3 +1,5 @@
+package confluence
+
 import com.atlassian.confluence.user.UserAccessor
 import com.atlassian.spring.container.ContainerManager
 

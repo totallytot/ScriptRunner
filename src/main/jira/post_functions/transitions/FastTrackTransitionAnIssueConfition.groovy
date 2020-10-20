@@ -1,3 +1,5 @@
+package jira.post_functions.transitions
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def customFieldManager = ComponentAccessor.customFieldManager

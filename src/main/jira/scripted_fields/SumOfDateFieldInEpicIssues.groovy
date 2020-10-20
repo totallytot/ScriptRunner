@@ -1,3 +1,5 @@
+package jira.scripted_fields
+
 import com.atlassian.jira.component.ComponentAccessor
 
 if (issue.issueType.name != "Epic") return

@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def schemeManager = ComponentAccessor.workflowSchemeManager

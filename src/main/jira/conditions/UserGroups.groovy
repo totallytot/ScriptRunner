@@ -1,3 +1,5 @@
+package jira.conditions
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def currentUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser

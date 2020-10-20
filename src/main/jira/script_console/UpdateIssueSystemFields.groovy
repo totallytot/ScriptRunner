@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.component.ComponentAccessor
 import java.sql.Timestamp

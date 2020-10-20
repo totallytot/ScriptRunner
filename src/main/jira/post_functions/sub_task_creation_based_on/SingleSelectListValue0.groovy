@@ -1,3 +1,5 @@
+package jira.post_functions.sub_task_creation_based_on
+
 import com.atlassian.jira.component.ComponentAccessor
 
 // for testing in script console

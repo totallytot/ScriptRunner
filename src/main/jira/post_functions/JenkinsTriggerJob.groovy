@@ -1,3 +1,5 @@
+package jira.post_functions
+
 def  issuekey=issue.getKey()
 def issueReporter=issue.getReporter()
 def issueReporterMail=issueReporter.getEmailAddress()

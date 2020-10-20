@@ -1,3 +1,5 @@
+package jira.listeners.set_field_based_on
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.event.issue.link.IssueLinkCreatedEvent
 import JiraUtilHelper

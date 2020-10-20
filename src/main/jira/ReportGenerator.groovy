@@ -1,3 +1,5 @@
+package jira
+
 import com.atlassian.jira.component.ComponentAccessor
 import groovy.time.TimeCategory
 import groovy.xml.MarkupBuilder
@@ -6,7 +8,6 @@ import com.onresolve.scriptrunner.runner.customisers.WithPlugin
 import com.riadalabs.jira.plugins.insight.channel.external.api.facade.IQLFacade
 import com.riadalabs.jira.plugins.insight.channel.external.api.facade.ObjectFacade
 import com.riadalabs.jira.plugins.insight.services.model.ObjectBean
-import JiraUtilHelper
 
 import java.text.SimpleDateFormat
 

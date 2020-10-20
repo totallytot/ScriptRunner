@@ -1,3 +1,5 @@
+package confluence
+
 import com.atlassian.confluence.api.model.pagination.PageResponse
 import com.atlassian.confluence.api.model.pagination.SimplePageRequest
 import com.atlassian.confluence.api.service.search.CQLSearchService

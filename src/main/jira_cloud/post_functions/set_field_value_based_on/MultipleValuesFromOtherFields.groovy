@@ -1,3 +1,4 @@
+package jira_cloud.post_functions.set_field_value_based_on
 // get list of fields and find required values
 def customFields = get("/rest/api/2/field").asObject(List).body.findAll { (it as Map).custom } as List<Map>
 

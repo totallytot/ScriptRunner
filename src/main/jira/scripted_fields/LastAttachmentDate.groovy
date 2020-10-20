@@ -1,3 +1,5 @@
+package jira.scripted_fields
+
 import com.atlassian.jira.component.ComponentAccessor
 
 def AttachmentM = ComponentAccessor.getAttachmentManager()

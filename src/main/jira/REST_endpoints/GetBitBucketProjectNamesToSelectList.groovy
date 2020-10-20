@@ -1,3 +1,5 @@
+package jira.REST_endpoints
+
 import com.onresolve.scriptrunner.runner.rest.common.CustomEndpointDelegate
 import groovy.json.JsonBuilder
 import groovy.transform.BaseScript

@@ -1,3 +1,5 @@
+package jira.jobs
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.onresolve.scriptrunner.runner.customisers.PluginModule
 import com.onresolve.scriptrunner.runner.customisers.WithPlugin

@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.security.roles.ProjectRoleActors
 import com.atlassian.jira.security.roles.ProjectRoleManager

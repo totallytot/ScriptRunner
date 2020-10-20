@@ -1,3 +1,5 @@
+package confluence.scheduled_jobs
+
 import com.atlassian.mail.Email
 import com.atlassian.sal.api.component.ComponentLocator
 import com.atlassian.confluence.mail.ConfluenceMailServerManager

@@ -1,3 +1,5 @@
+package jira.behaviors.insight
+
 import com.atlassian.jira.component.ComponentAccessor
 import com.onresolve.jira.groovy.user.FieldBehaviours
 import com.onresolve.scriptrunner.runner.customisers.PluginModule
