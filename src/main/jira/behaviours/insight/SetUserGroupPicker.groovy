@@ -1,4 +1,4 @@
-package jira.behaviors.insight
+package jira.behaviours.insight
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.onresolve.jira.groovy.user.FieldBehaviours

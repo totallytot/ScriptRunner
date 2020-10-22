@@ -1,4 +1,4 @@
-package jira.behaviors
+package jira.behaviours
 
 import com.onresolve.jira.groovy.user.FieldBehaviours
 import groovy.transform.BaseScript
