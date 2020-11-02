@@ -2,9 +2,10 @@ package jira_cloud
 
 import kong.unirest.Unirest
 
-static Map getIssue(issueKey) {
+static Map getIssue(String issueKey) {
     Unirest.get("/rest/api/2/issue/${issueKey}").asObject(Map).body
 }
+
 
 static def getCustomFiledValue(issue, customfield_id) {
     def result = Unirest.get("/rest/api/2/issue/${issue.key}?fields=${customfield_id}")
@@ -38,12 +39,21 @@ static def setSelectListField(issue, customfield_id, value) {
     }
 }
 
-static setTextField(issue, customfield_id, value) {
-    Unirest.put("/rest/api/2/issue/${issue.key}")
+static setField(String issueKey, String customfield_id, value) {
+    Unirest.put("/rest/api/2/issue/${issueKey}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.FALSE)
             .header("Content-Type", "application/json")
-            .body([fields:[(customfield_id):value]]).asString()
+            .body([fields: [(customfield_id): value]]).asString()
+}
+
+static int setFields(String issueKey, Map fieldsAndVals) {
+    def result = Unirest.put("/rest/api/2/issue/${issueKey}")
+            .queryString("overrideScreenSecurity", Boolean.TRUE)
+            .queryString("notifyUsers", Boolean.FALSE)
+            .header("Content-Type", "application/json")
+            .body([fields: fieldsAndVals]).asString()
+    return result.status
 }
 
 static setDueDate(issue, String date) {
