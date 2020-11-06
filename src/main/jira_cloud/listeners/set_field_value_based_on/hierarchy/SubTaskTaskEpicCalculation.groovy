@@ -1,4 +1,4 @@
-package jira_cloud.listeners.set_field_value_based_on
+package jira_cloud.listeners.set_field_value_based_on.hierarchy
 
 import kong.unirest.Unirest
 
@@ -34,9 +34,15 @@ def isSubTask = issue.fields.issuetype.subtask as Boolean
 def issueType = issue.fields.issuetype.name as String
 
 if (issueType == "Epic") return
-def epicLinkChange = changelog.items.find { (it as Map).field == EPIC_LINK } as Map
-def epicKey = (issue.fields[epicLinkId] != null) ? issue.fields[epicLinkId] : epicLinkChange.fromString
+def epicLinkChange = changelog?.items?.find { (it as Map).field == EPIC_LINK } as Map
 
+def epicKeys = []
+epicKeys << issue.fields[epicLinkId]
+if (epicLinkChange) {
+    epicKeys << epicLinkChange.fromString
+    epicKeys << epicLinkChange.toString
+}
+epicKeys.removeAll { it == null }
 def parentIssueKey = null
 def parentIssue = null
 def subTasksKeys = null
@@ -64,9 +70,9 @@ if (changedFields?.any { it in [E_H_N_L, EPIC_LINK] } || isIssueCreatedEvent) {
         parentFieldsVals.put(bcnlId, bcnlValParent)
         parentFieldsVals.put(ehnlId, enhlValParent)
         setFields(parentIssueKey, parentFieldsVals)
-        epicKey = parentIssue.fields[epicLinkId]
+        epicKeys << parentIssue.fields[epicLinkId]
     }
-    if (epicKey) {
+    epicKeys.each { epicKey ->
         // Epic calculation: BUDGETED: COST NIKLAUS LÜTHY = SUM of issues in epic BUDGETED: NIKLAUS LÜTHY
         def jqlIssuesInEpic = """ "${EPIC_LINK}" = ${epicKey} """
         def issuesInEpic = executeSearch(jqlIssuesInEpic, 0, 500) as List
@@ -100,9 +106,9 @@ if (changedFields?.any { it in [E_H_S_D, EPIC_LINK] } || isIssueCreatedEvent) {
         parentFieldsVals.put(bsdId, bsdValParent)
         parentFieldsVals.put(ehsdId, ehsdValParent)
         setFields(parentIssueKey, parentFieldsVals)
-        epicKey = parentIssue.fields[epicLinkId]
+        epicKeys << parentIssue.fields[epicLinkId]
     }
-    if (epicKey) {
+    epicKeys.each { epicKey ->
         // Epic calculation: BUDGETED: SMARCOM DEVELOPMENT = SUM of issues in epic BUDGETED: SMARCOM DEVELOPMENT
         def jqlIssuesInEpic = """ "${EPIC_LINK}" = ${epicKey} """
         def issuesInEpic = executeSearch(jqlIssuesInEpic, 0, 500) as List
@@ -136,9 +142,9 @@ if (changedFields?.any { it in [E_H_S_P_S, EPIC_LINK] } || isIssueCreatedEvent) 
         parentFieldsVals.put(bspsId, bspsValParent)
         parentFieldsVals.put(ehspsId, ehspsValParent)
         setFields(parentIssueKey, parentFieldsVals)
-        epicKey = parentIssue.fields[epicLinkId]
+        epicKeys << parentIssue.fields[epicLinkId]
     }
-    if (epicKey) {
+    epicKeys.each { epicKey ->
         // Epic calculation: BUDGETED: SMARCOM PROJECT SUPPORT = SUM of issues in epic BUDGETED: SMARCOM PROJECT SUPPORT
         def jqlIssuesInEpic = """ "${EPIC_LINK}" = ${epicKey} """
         def issuesInEpic = executeSearch(jqlIssuesInEpic, 0, 500) as List

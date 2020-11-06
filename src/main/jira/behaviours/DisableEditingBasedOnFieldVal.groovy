@@ -11,6 +11,10 @@ log.warn "### START OF LockedForChanges ###"
 log.warn "Working with ${underlyingIssue.issueType.name}"
 def lockedForChangeField = getFieldById(getFieldChanged())
 def lockedForChangeFieldVal = lockedForChangeField.value as String
+
+lockedForChangeField.setHidden(true)
+if (getFieldScreen().name == "PgM") lockedForChangeField.setHidden(false)
+
 def systemFieldIds = IssueFieldConstants.fields.findResults {
     // apply changes to make field names similar to ids from front end
     it.name.toLowerCase().replace("_", "")
