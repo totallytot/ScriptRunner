@@ -6,7 +6,6 @@ static Map getIssue(String issueKey) {
     Unirest.get("/rest/api/2/issue/${issueKey}").asObject(Map).body
 }
 
-
 static def getCustomFiledValue(issue, customfield_id) {
     def result = Unirest.get("/rest/api/2/issue/${issue.key}?fields=${customfield_id}")
             .header('Content-Type', 'application/json')
@@ -84,4 +83,13 @@ static List executeSearch(String jqlQuery, int startAt, int maxResults) {
             .queryString("maxResults", maxResults)
             .asObject(Map)
     searchRequest.status == 200 ? searchRequest.body.issues as List : null
+}
+
+static setOriginalEstimate(issueKey, minutes) {
+    Unirest.put("/rest/api/2/issue/${issueKey}")
+            .queryString("overrideScreenSecurity", Boolean.TRUE)
+            .queryString("notifyUsers", Boolean.FALSE)
+            .header("Content-Type", "application/json")
+            .body([fields: [timetracking: [originalEstimate: "${minutes}m"]]])
+            .asString()
 }
