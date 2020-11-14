@@ -11,15 +11,13 @@ import kong.unirest.Unirest
  * For Epic:
  *  - 'Estimated days to complete' = Sum of Estimated days to complete' of all issues in Epic;
  *  - 'Remaining days to complete' = Epic's 'Estimated days to complete' - 'Estimated days to complete' of resolved
- *  issues in Epic.
+ *  issues in Epic, if there are no resolved issues use 0 instead of null.
  * For Initiative:
- *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of epics in this initiative;
- *  - 'Remaining days to complete' = Initiative's 'Estimated days to complete' - 'Estimated days to complete' of
- *  resolved Epics in Initiative.
+ *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of Epics in this Initiative;
+ *  - 'Remaining days to complete' = Sum 'Remaining days to complete' of Epics
  * For Theme:
  *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of initiatives in this theme;
- *  - 'Remaining days to complete' = Theme's 'Estimated days to complete' - 'Estimated days to complete' of resolved
- *  Initiatives in Theme.
+ *  - 'Remaining days to complete' = Sum 'Remaining days to complete' of Initiatives in Theme.
  * ### Triggers ###
  * - 'Effort Sizing' is updated
  * - any issue is added/removed/reassigned to/from/between Epic/s;
@@ -48,10 +46,10 @@ def calculateEpicIssue = { String issueKey ->
     def estimatedDaysToCompleteVal = issuesInEpic.findResults { it.fields[estimatedDaysToCompleteId] }.sum()
     logger.info "estimatedDaysToCompleteVal ${estimatedDaysToCompleteVal}"
     def estimatedDaysToCompleteResolvedIssues = issuesInEpic.findResults {
-        it.fields.resolution ? it.fields[estimatedDaysToCompleteId] : null
+        it.fields.resolution ? it.fields[estimatedDaysToCompleteId] : 0
     }.sum()
     logger.info "estimatedDaysToCompleteResolvedIssues ${estimatedDaysToCompleteResolvedIssues}"
-    def remainingDaysToCompleteVal = null
+    def remainingDaysToCompleteVal = 0
     if ((estimatedDaysToCompleteVal || estimatedDaysToCompleteVal == 0) &&
             (estimatedDaysToCompleteResolvedIssues || estimatedDaysToCompleteResolvedIssues == 0))
         remainingDaysToCompleteVal = estimatedDaysToCompleteVal - estimatedDaysToCompleteResolvedIssues
@@ -68,14 +66,8 @@ def calculateRoadmapIssue = { String issueKey ->
     def childIssues = executeSearch(jqlChildIssues, 0, 500)
     def estimatedDaysToCompleteVal = childIssues.findResults { it.fields[estimatedDaysToCompleteId] }.sum()
     logger.info "estimatedDaysToCompleteVal ${estimatedDaysToCompleteVal}"
-    def estimatedDaysToCompleteResolvedIssues = childIssues.findResults {
-        it.fields.resolution ? it.fields[estimatedDaysToCompleteId] : null
-    }.sum()
-    logger.info "estimatedDaysToCompleteResolvedIssues ${estimatedDaysToCompleteResolvedIssues}"
-    def remainingDaysToCompleteVal = null
-    if ((estimatedDaysToCompleteVal || estimatedDaysToCompleteVal == 0) &&
-            (estimatedDaysToCompleteResolvedIssues || estimatedDaysToCompleteResolvedIssues == 0))
-        remainingDaysToCompleteVal = estimatedDaysToCompleteVal - estimatedDaysToCompleteResolvedIssues
+    def remainingDaysToCompleteVal = childIssues.findResults { it.fields[remainingDaysToCompleteId] }.sum()
+    logger.info "remaningDaysToComplete ${remainingDaysToCompleteVal}"
     def roadmapIssueFieldsVals = [:]
     roadmapIssueFieldsVals.put(estimatedDaysToCompleteId, estimatedDaysToCompleteVal)
     roadmapIssueFieldsVals.put(remainingDaysToCompleteId, remainingDaysToCompleteVal)
