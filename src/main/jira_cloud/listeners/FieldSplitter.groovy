@@ -4,9 +4,9 @@ import kong.unirest.Unirest
 
 /**
  * A Jira issue is created automatically by a webhook from freshservice, and the input information from freshservice
- * is dumped into the field "Freshservice input". The script that reads that field and spreads the information into
- * other fields in Jira based on mapping. Some transmits to text fields but others need to "select fields". Also, if a
- * field goes into a "select field" and the option does not exist already, then the option is added to the select list.
+ * is dumped into the field "Freshservice input". The script reads that field and spreads the information into other
+ * fields in Jira based on mapping. Some transmits to text fields but others need to "select fields". Also, if a field
+ * goes into a "select field" and the option does not exist already, then the option is added to the select list.
  */
 
 final String FS_INPUT = "Freshservice Input"
@@ -57,22 +57,40 @@ fieldsValsMapping.put(fsTicketReporterId, fsInputList[2].find("(?<=Requester:).*
 fieldsValsMapping.put(fsPriorityId, fsInputList[3].find("(?<=Priority:).*\$").trim())
 fieldsValsMapping.put(systemId, fsInputList[4].find("(?<=What’s broken:).*\$").trim())
 
-//cascading select list
-def parentVal = fsInputList[5].find("(?<=Which part:).*\$").trim()
-def childVal = fsInputList[6].find("(?<=Which Functionality\\?:).*\$").trim()
-fieldsValsMapping.put(productsFunctionalityId, ["value": parentVal, "child": ["value": childVal]])
+//cascading select list with adding non-existing options
+def productsFunctionalityParentVal = fsInputList[5].find("(?<=Which part:).*\$").trim()
+def productsFunctionalityChildVal = fsInputList[6].find("(?<=Which Functionality\\?:).*\$").trim()
+Map<String, List<String>> allowedParentChildMapping = editMetaData.fields[productsFunctionalityId].allowedValues
+        .collectEntries { [it.value, it.children.value] }
+def isAllowedForProductsFunctionality = allowedParentChildMapping.containsKey(productsFunctionalityParentVal) &&
+        productsFunctionalityChildVal in allowedParentChildMapping.get(productsFunctionalityParentVal)
+if (!isAllowedForProductsFunctionality)
+    addOptionsCascadingSelectList(productsFunctionalityId, productsFunctionalityParentVal, [productsFunctionalityChildVal])
+fieldsValsMapping.put(productsFunctionalityId,
+        ["value": productsFunctionalityParentVal, "child": ["value": productsFunctionalityChildVal]])
 
-//single select lists
-fieldsValsMapping.put(fsClinicalSafetyId, ["value": fsInputList[7].find("(?<=Clinical Safety:).*\$").trim()])
-fieldsValsMapping.put(covidTechIssueId, ["value": fsInputList[13].find("(?<=Covid19 Tech Issue:).*\$").trim()])
+//single select lists with adding non-existing options
+def fsClinicalSafetyVal = fsInputList[7].find("(?<=Clinical Safety:).*\$").trim()
+isAllowedVal(fsClinicalSafetyId, fsClinicalSafetyVal) ?: addOptions(fsClinicalSafetyId, [fsClinicalSafetyVal])
+fieldsValsMapping.put(fsClinicalSafetyId, ["value": fsClinicalSafetyVal])
 
-//multi select lists
-def regionVal = fsInputList[8].find("(?<=Region impacted:).*\$").split(",").findResults { ["value": it.trim()] }
+def covidTechIssueVal = fsInputList[13].find("(?<=Covid19 Tech Issue:).*\$").trim()
+isAllowedVal(covidTechIssueId, covidTechIssueVal) ?: addOptions(covidTechIssueId, [covidTechIssueVal])
+fieldsValsMapping.put(covidTechIssueId, ["value": covidTechIssueVal])
+
+//multi select lists with adding non-existing options
+def regionVal = fsInputList[8].find("(?<=Region impacted:).*\$").split(",")*.trim()
+def notAllowedRegionVals = regionVal.findResults { isAllowedVal(regionId, it) ? null : it }
+notAllowedRegionVals.empty ?: addOptions(regionId, notAllowedRegionVals)
+regionVal = regionVal.findResults { ["value": it] }
 fieldsValsMapping.put(regionId, regionVal)
-def fsSourceVal = fsInputList[12].find("(?<=Source:).*\$").split(",").findResults { ["value": it.trim()] }
+
+def fsSourceVal = fsInputList[12].find("(?<=Source:).*\$").split(",")*.trim()
+def notAllowedFsSourceVals = fsSourceVal.findResults { isAllowedVal(fsSourceId, it) ? null : it }
+notAllowedFsSourceVals.empty ?: addOptions(fsSourceId, notAllowedFsSourceVals)
+fsSourceVal = fsSourceVal.findResults { ["value": it] }
 fieldsValsMapping.put(fsSourceId, fsSourceVal)
 
-//multi select list with adding non-existing options
 def countriesVal = []
 countriesVal << fsInputList[9].find("(?<=Country impacted:).*\$").trim()
 def selectedCountries = fsInputList[11].find("(?<=Selected countries:).*\$")
@@ -80,11 +98,12 @@ if (selectedCountries) {
     def countries = selectedCountries.split(",")*.trim()
     countriesVal.addAll(countries)
 }
-def notAllowedVals = countriesVal.findResults { isAllowedVal(countriesId, it) ? null : it.toString().trim() }
-if (!notAllowedVals.empty) addOptions(countriesId, notAllowedVals)
-countriesVal = countriesVal.findResults { ["value": it.toString().trim()] }
+def notAllowedCountriesVals = countriesVal.findResults { isAllowedVal(countriesId, it) ? null : it }
+notAllowedCountriesVals.empty ?: addOptions(countriesId, notAllowedCountriesVals)
+countriesVal = countriesVal.findResults { ["value": it] }
 fieldsValsMapping.put(countriesId, countriesVal)
 
+logger.info fieldsValsMapping.toString()
 setFields(issue.key, fieldsValsMapping)
 
 static Map getEditMetaData(String issueKey) {
@@ -116,5 +135,14 @@ static int addOptions(String customFieldId, List<String> options) {
     def result = Unirest.post("/rest/api/3/customField/${customFieldId}/option")
             .header("Content-Type", "application/json")
             .body(["options": options]).asString()
+    return result.status
+}
+
+static int addOptionsCascadingSelectList(String customFieldId, String parentVal, List<String> childVals) {
+    customFieldId = customFieldId.replace("customfield_", "")
+    def result = Unirest.post("/rest/api/3/customField/${customFieldId}/option")
+            .header("Content-Type", "application/json")
+            .body(["options": [["cascadingOptions": childVals, "value": parentVal]]])
+            .asString()
     return result.status
 }
