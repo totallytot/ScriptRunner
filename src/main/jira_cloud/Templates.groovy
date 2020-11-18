@@ -8,7 +8,7 @@ static Map getIssue(String issueKey) {
             .asObject(Map).body
 }
 
-static Map getCustomFields() {
+static List<Map> getCustomFields() {
     Unirest.get("/rest/api/2/field")
             .header('Content-Type', 'application/json')
             .asObject(List)
@@ -60,12 +60,12 @@ static setField(String issueKey, String customfield_id, value) {
             .body([fields: [(customfield_id): value]]).asString()
 }
 
-static int setFields(String issueKey, Map fieldsAndVals) {
+static int setFields(String issueKey, Map fieldsValsMapping) {
     def result = Unirest.put("/rest/api/2/issue/${issueKey}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.FALSE)
             .header("Content-Type", "application/json")
-            .body([fields: fieldsAndVals]).asString()
+            .body([fields: fieldsValsMapping]).asString()
     return result.status
 }
 
