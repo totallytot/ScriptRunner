@@ -1,4 +1,4 @@
-package jira.behaviours
+package jira.behaviours.epic_lock
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.Issue
@@ -11,7 +11,7 @@ import groovy.transform.BaseScript
 final String EPIC_LOCK_FIELD_NAME = "LockedForChange"
 
 log.warn "### START OF EpicLockedForLinking ###"
-def epicLinkField = getFieldById(getFieldChanged())
+def epicLinkField = getFieldById(getFieldChanged()) //Epic Link
 def epicLinkFieldVal = epicLinkField.value as String
 if (!epicLinkFieldVal) return
 def epicKey = epicLinkFieldVal.substring(4)

@@ -1,0 +1,24 @@
+Issue Type is Epic. Custom field - Checkbox type, name = "LockedForChange", Values = Yes\None (empty).
+“LockedForChange” can be set to “Yes” during specific transition via transition screen.
+
+### When “LockedForChange” = “Yes” for Epic ###:
+- disable inline editing (all fields except Comments) in Epic and linked issue of FR issue type only;
+- disable adding links and adding Epic children;
+### For linked issues of Issue Type FR, when the Epic has “LockedForChange” = “Yes" ###:
+- disable editing of FR type issues that are linked to Locked Epic (“LockedForChange” = “Yes”).
+### Scripts ###:
+1. [Behaviours] DisableEditingBasedOnFieldVal.groovy disables editing for Epic/FR;
+2. [Behaviours] HideLockIndicatorField.groovy hides “LockedForChange” field. SR does not allow hiding checkbox field with empty value, when the script is
+   attached to the same field. Current script solves the problem. Can be attached to any visible field, for example "Summary".
+3. [Listener] jira/listeners/copy/SelectListValFromEpicToIssuesInEpic.groovy copies LockedForChange field val from Epic to linked FR issues
+   in order to make DisableEditingBasedOnFieldVal.groovy script actual for linked FR issues too;
+4. [Behaviours] LimitLinkingToEpicFromChildBasedOnEpicFieldVal.groovy does not allow linking to locked Epic;
+5. [Fragments] jira/fragments/HideUiElementsBasedOnFieldValue.groovy for hiding UI elements in Epic.
+   List of hidden elements:
+   - com.atlassian.jira.plugin.system.issueoperations:clone-issue
+   - com.atlassian.jira.plugin.system.issueoperations:create-subtask
+   - com.atlassian.jira.plugin.system.issueoperations:delete-issue
+   - com.atlassian.jira.plugin.system.issueoperations:edit-labels
+   - com.atlassian.jira.plugin.system.issueoperations:issue-to-subtask
+   - com.atlassian.jira.plugin.system.issueoperations:link-issue
+   - com.atlassian.jira.plugin.system.issueoperations:move-issue

@@ -7,21 +7,23 @@ import com.atlassian.jira.issue.customfields.option.LazyLoadedOption
 
 final String LOCK_FIELD_NAME = "LockedForChange"
 final List ALLOWED_ISSUE_TYPES_IN_EPIC = ["FR"]
+
+//condition
+def issue = event.issue
+if (issue.issueType.name != "Epic") return
+def changeItems = event.changeLog.getRelated("ChildChangeItem")
+if (!changeItems?.any { it.field.toString().equalsIgnoreCase(LOCK_FIELD_NAME) }) return
+
 def issueManager = ComponentAccessor.issueManager
 def customFieldManager = ComponentAccessor.customFieldManager
 def executionUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
 def lockField = customFieldManager.customFieldObjects.find { it.name == LOCK_FIELD_NAME }
 
-def issue = event.issue
-if (issue.issueType.name != "Epic") return
-def changeItems = event.changeLog.getRelated("ChildChangeItem")
-if (!changeItems?.any { it.field.toString().equalsIgnoreCase(LOCK_FIELD_NAME) }) return
 def lockedFieldVal = issue.getCustomFieldValue(lockField) as List<LazyLoadedOption>
 def issuesInEpic = getIssuesInEpic(issue)
 if (issuesInEpic.empty) return
-def affectedIssueKeys = issuesInEpic?.findResults {
-    if (it.issueType.name in ALLOWED_ISSUE_TYPES_IN_EPIC) return it.key
-}
+
+def affectedIssueKeys = issuesInEpic?.findResults { if (it.issueType.name in ALLOWED_ISSUE_TYPES_IN_EPIC) return it.key }
 affectedIssueKeys.each {
     def mutableIssue = issueManager.getIssueObject(it)
     mutableIssue.setCustomFieldValue(lockField, lockedFieldVal)

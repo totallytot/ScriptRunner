@@ -1,4 +1,4 @@
-package jira.behaviours
+package jira.behaviours.epic_lock
 
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.issue.IssueFieldConstants
@@ -9,11 +9,13 @@ import groovy.transform.BaseScript
 
 log.warn "### START OF LockedForChanges ###"
 log.warn "Working with ${underlyingIssue.issueType.name}"
-def lockedForChangeField = getFieldById(getFieldChanged())
+
+def lockedForChangeField = getFieldById(getFieldChanged()) // LockedForChange field
 def lockedForChangeFieldVal = lockedForChangeField.value as String
 
-lockedForChangeField.setHidden(true)
-if (getFieldScreen().name == "PgM") lockedForChangeField.setHidden(false)
+def field = getFieldByName("LockedForChange")
+if (getFieldScreen().name == "PgM") field.setHidden(false)
+else field.setHidden(true)
 
 def systemFieldIds = IssueFieldConstants.fields.findResults {
     // apply changes to make field names similar to ids from front end

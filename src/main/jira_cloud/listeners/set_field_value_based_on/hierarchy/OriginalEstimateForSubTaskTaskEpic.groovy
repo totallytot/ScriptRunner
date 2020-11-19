@@ -7,8 +7,7 @@ import kong.unirest.Unirest
  * Sub-task -> Issue in Epic -> Epic
  * For Epic:
  * - 'Original Estimate' = Sum 'Original Estimate' of all Issues in Epic;
- * ### If issue in Epic has subtasks, then 'Original Estimates' and statuses of subtasks should be considered. Parent
- * task should not be counted. Use hours ###:
+ * ### If issue in Epic has subtasks, then 'Original Estimates' and statuses of subtasks should be considered. Parent task should not be counted. Use hours ###:
  * - 'Estimate To Do' = Sum 'Original Estimate' of all issues in Epic in 'To Do' status;
  * - 'Estimate In Progress' = Sum 'Original Estimate' of all issues in Epic in 'In Progress' status;
  * - 'Estimate Issues' = Sum 'Original Estimate' of all issues in Epic in 'Issues' status;
