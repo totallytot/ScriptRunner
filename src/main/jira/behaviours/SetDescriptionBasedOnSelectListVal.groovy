@@ -9,6 +9,9 @@ def affectedField = getFieldById(getFieldChanged())
 def affectedVal = affectedField.value
 def descriptionField = getFieldById("description")
 
+def defaultVal = "defaultVal"
+descriptionField.setFormValue(defaultVal)
+
 if (affectedVal instanceof String) {
     switch (affectedVal) {
         case "Performance":
@@ -18,11 +21,11 @@ if (affectedVal instanceof String) {
             descriptionField.setFormValue("Y")
             break
         default:
-            descriptionField.setFormValue("")
+            descriptionField.setFormValue(defaultVal)
             break
     }
 } else if (affectedVal instanceof List) {
     if (affectedVal == ["Performance", "Test 0"]) descriptionField.setFormValue("XX")
     else if (affectedVal == ["Test 0", "Test 1"]) descriptionField.setFormValue("YY")
-    else descriptionField.setFormValue("")
+    else descriptionField.setFormValue(defaultVal)
 }
