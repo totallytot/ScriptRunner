@@ -21,7 +21,7 @@ def username = "service_account"
 def executionUser = ComponentAccessor.userManager.getUserByName(username)
 def resolutionPeriodDays = 1
 def archLabel = "archived_hide_from_tcc_board"
-// find all epics that were resolved more than x days ago
+// find all epicsWithoutIssues that were resolved more than x days ago
 def jql = "project=RAD and issuetype=Epic and (labels is empty or labels!=${archLabel}) and resolved<=-${resolutionPeriodDays}d"
 
 static List<Issue> getIssuesFromJql(ApplicationUser executionUser, String jql) {

@@ -8,7 +8,7 @@ import groovy.transform.BaseScript
 
 @BaseScript FieldBehaviours fieldBehaviours
 
-final String EPIC_LOCK_FIELD_NAME = "LockedForChange"
+final String epicLockFieldName = "LockedForChange"
 
 log.warn "### START OF EpicLockedForLinking ###"
 def epicLinkField = getFieldById(getFieldChanged()) //Epic Link
@@ -16,7 +16,7 @@ def epicLinkFieldVal = epicLinkField.value as String
 if (!epicLinkFieldVal) return
 def epicKey = epicLinkFieldVal.substring(4)
 def epicIssue = ComponentAccessor.issueManager.getIssueObject(epicKey)
-def lockField = customFieldManager.customFieldObjects.find { it.name == EPIC_LOCK_FIELD_NAME }
+def lockField = customFieldManager.customFieldObjects.find { it.name == epicLockFieldName }
 def lockedFieldVal = epicIssue.getCustomFieldValue(lockField) as List<LazyLoadedOption>
 if (!lockedFieldVal) return
 def isEpicLocked = lockedFieldVal.any { it.value == "Yes" }

@@ -29,7 +29,7 @@ if (issue.isSubTask()){
         return
     }
 }
-else{   if (task.getProjectObject().name!='Master (HOF)' && task.getProjectObject().name!='Epics (HOF)'){
+else{   if (task.getProjectObject().name!='Master (HOF)' && task.getProjectObject().name!='EpicsWithoutIssues (HOF)'){
     def epic = task.getCustomFieldValue(ComponentAccessor.getCustomFieldManager().getCustomFieldObjectByName('Epic Link'))
     def linksOfEpic = issueLinkManager.getOutwardLinks(epic.getId())
     def taskinepic

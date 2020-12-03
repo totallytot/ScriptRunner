@@ -19,7 +19,7 @@ import org.apache.log4j.Logger
 /**
  * Hierarchy: Theme - Epic - Story/Bug.
  * Current listener sets:
- *  - start/end dates in Theme based on start/end dates related to linked Epics;
+ *  - start/end dates in Theme based on start/end dates related to linked EpicsWithoutIssues;
  *  - start/end dates in Epic based on sprint start/end dates related to issues in Epic (story and bug only).
  *
  * Epic calculation:
@@ -33,9 +33,9 @@ import org.apache.log4j.Logger
  *  - sprint started, closed, updated.
  *
  * Theme calculation:
- *  - search for all linked epics of the theme;
+ *  - search for all linked epicsWithoutIssues of the theme;
  *  - get the earliest Epic’s Start Date and populate the Start Date field of the Theme;
- *  - get the latest Epics End Date and populate the End Date field of the Theme.
+ *  - get the latest EpicsWithoutIssues End Date and populate the End Date field of the Theme.
  *  Triggers:
  *  - link creation event between Epic and Theme;
  *  - link removal event between Epic and Theme;
@@ -257,7 +257,7 @@ if (triggerIssueLink) {
                 find { it.issueLinkType.name == "Epic-Story Link" }?.sourceObject
     }
     if (!epics.empty) {
-        logger.debug "Epics from sprint ${epics*.key}"
+        logger.debug "EpicsWithoutIssues from sprint ${epics*.key}"
         epics.each { Issue epicIssue ->
             def wasEpicUpdated = epicStartEndDatesUpdate(epicIssue)
             if (wasEpicUpdated) {

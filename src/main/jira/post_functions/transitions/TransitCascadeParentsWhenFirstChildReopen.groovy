@@ -17,7 +17,7 @@ def taskunderepic
 def issueLinkManager = ComponentAccessor.getIssueLinkManager()
 
 def allIssuesUnderFeature = []
-if (issue.getProjectObject().name!='Master (HOF)' && issue.getProjectObject().name!='Epics (HOF)'){
+if (issue.getProjectObject().name!='Master (HOF)' && issue.getProjectObject().name!='EpicsWithoutIssues (HOF)'){
     task=issue
     if (issue.isSubTask()){
     log.debug "issue $issue is subtask"

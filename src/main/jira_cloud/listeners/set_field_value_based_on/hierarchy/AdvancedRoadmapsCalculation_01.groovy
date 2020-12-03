@@ -16,8 +16,8 @@ import kong.unirest.Unirest
  *  to complete' * 100;
  *  - 'All Childs Resolved' = checks if all issues in Epic have resolution.
  * For Initiative:
- *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of Epics in this Initiative;
- *  - 'Remaining days to complete' = Sum 'Remaining days to complete' of Epics;
+ *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of EpicsWithoutIssues in this Initiative;
+ *  - 'Remaining days to complete' = Sum 'Remaining days to complete' of EpicsWithoutIssues;
  *  - 'Progress' = ('Initiative's Estimated days to complete' - Initiative's 'Remaining to complete') / Initiative's
  *  'Estimated days to complete' * 100;
  *  - 'All Childs Resolved' = checks if all child issues have resolution.

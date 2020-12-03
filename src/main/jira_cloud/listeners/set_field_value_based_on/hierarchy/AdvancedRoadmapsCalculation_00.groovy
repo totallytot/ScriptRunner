@@ -15,7 +15,7 @@ import kong.unirest.Unirest
  * Epic:
  *  - 'Estimated days to complete' = Sum of Estimated days to complete' of all issues in epic
  * Initiative:
- *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of epics in this initiative.
+ *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of epicsWithoutIssues in this initiative.
  * Theme:
  *  - 'Estimated days to complete' = Sum of 'Estimated days to complete' of initiatives in this theme.
  *

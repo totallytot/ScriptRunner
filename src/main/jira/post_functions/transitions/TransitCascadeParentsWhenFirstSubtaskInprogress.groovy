@@ -22,7 +22,7 @@ if (issue.isSubTask()){
     else return
 }
 else{
-    if (issue.getProjectObject().name!='Master (HOF)' && issue.getProjectObject().name!='Epics (HOF)'){
+    if (issue.getProjectObject().name!='Master (HOF)' && issue.getProjectObject().name!='EpicsWithoutIssues (HOF)'){
 		def epic = issue.getCustomFieldValue(ComponentAccessor.getCustomFieldManager().getCustomFieldObjectByName('Epic Link'))
         if (epic.getStatus().getStatusCategory().name.equals('New')){
             transitIssue(271,epic)

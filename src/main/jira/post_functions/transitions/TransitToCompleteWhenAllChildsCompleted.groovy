@@ -28,7 +28,7 @@ if (issue.isSubTask()){
     else  log.debug "task $parentIssue not complete"
 }
 else{
-    if (issue.getProjectObject().name!='Master (HOF)' && issue.getProjectObject().name!='Epics (HOF)'){
+    if (issue.getProjectObject().name!='Master (HOF)' && issue.getProjectObject().name!='EpicsWithoutIssues (HOF)'){
 		def epic = issue.getCustomFieldValue(ComponentAccessor.getCustomFieldManager().getCustomFieldObjectByName('Epic Link'))
         def linksOfEpic = issueLinkManager.getOutwardLinks(epic.getId())
         def task
