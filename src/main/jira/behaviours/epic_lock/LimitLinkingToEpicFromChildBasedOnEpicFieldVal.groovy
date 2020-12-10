@@ -14,6 +14,7 @@ log.warn "### START OF EpicLockedForLinking ###"
 def epicLinkField = getFieldById(getFieldChanged()) //Epic Link
 def epicLinkFieldVal = epicLinkField.value as String
 if (!epicLinkFieldVal) return
+
 def epicKey = epicLinkFieldVal.substring(4)
 def epicIssue = ComponentAccessor.issueManager.getIssueObject(epicKey)
 def lockField = customFieldManager.customFieldObjects.find { it.name == epicLockFieldName }
@@ -27,7 +28,8 @@ if (!issuesInEpic.empty) {
     def keys = issuesInEpic*.key
     isInEpic = keys.any { it == underlyingIssue?.key }
 }
-if (isEpicLocked && !isInEpic) epicLinkField.setError("Epic ${epicKey} is locked")
+
+if (isEpicLocked && !isInEpic && isFrIssueType) epicLinkField.setError("Epic ${epicKey} is locked")
 else epicLinkField.clearError()
 
 static List<Issue> getIssuesInEpic(Issue epic) {

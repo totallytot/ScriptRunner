@@ -9,11 +9,18 @@ static Map getIssue(String issueKey) {
 }
 
 static List<Map> getCustomFields() {
-    Unirest.get("/rest/api/2/field")
+    Unirest.get("/rest/api/3/field")
             .header('Content-Type', 'application/json')
             .asObject(List)
             .body
             .findAll { (it as Map).custom } as List<Map>
+}
+
+static List<Map> getIssueTypes() {
+    Unirest.get("/rest/api/3/issuetype")
+            .header('Content-Type', 'application/json')
+            .asObject(List)
+            .body as List<Map>
 }
 
 static Map getEditMetaData(String issueKey) {
@@ -22,23 +29,24 @@ static Map getEditMetaData(String issueKey) {
             .asObject(Map).body
 }
 
-static def getCustomFiledValue(issue, customfield_id) {
-    def result = Unirest.get("/rest/api/2/issue/${issue.key}?fields=${customfield_id}")
+static def getCustomFiledValue(Map issue, String customfieldId) {
+    def result = Unirest.get("/rest/api/2/issue/${issue.key}?fields=${customfieldId}")
             .header('Content-Type', 'application/json')
             .asObject(Map)
-    result.status == 200 ? result.body.fields[customfield_id]?.value : null
+    //noinspection GroovyConditional
+    result.status == 200 ? result.body.fields[customfieldId]?.value : null
 }
 
-static List getComments(issue) {
+static List getComments(Map issue) {
     Unirest.get("/rest/api/2/issue/${issue.key}/comment")
             .header('Content-Type', 'application/json')
             .asObject(Map).body.comments as List
 }
 
-static def setSelectListField(issue, customfield_id, value) {
+static def setSelectListField(Map issue, String customfieldId, String value) {
     def optionId = Unirest.get("/rest/api/2/issue/${issue.key}/editmeta")
             .header('Content-Type', 'application/json').asObject(Map)
-            .body.fields[customfield_id]?.allowedValues?.find { it.value == value}?.id
+            .body.fields[customfieldId]?.allowedValues?.find { it.value == value}?.id
     if (optionId) {
         Unirest.put("/rest/api/2/issue/${issue.key}")
                 .queryString("overrideScreenSecurity", Boolean.TRUE)
@@ -46,22 +54,22 @@ static def setSelectListField(issue, customfield_id, value) {
                 .header("Content-Type", "application/json")
                 .body([
                         fields: [
-                                (customfield_id):[value:"${value}"]
+                                (customfieldId):[value: value]
                         ]
                 ]).asString()
     }
 }
 
-static setField(String issueKey, String customfield_id, value) {
+static setField(String issueKey, String customfieldId, String value) {
     Unirest.put("/rest/api/2/issue/${issueKey}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.FALSE)
             .header("Content-Type", "application/json")
-            .body([fields: [(customfield_id): value]]).asString()
+            .body([fields: [(customfieldId): value]]).asString()
 }
 
 static int setFields(String issueKey, Map fieldsValsMapping) {
-    def result = Unirest.put("/rest/api/2/issue/${issueKey}")
+    def result = Unirest.put("/rest/api/3/issue/${issueKey}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.FALSE)
             .header("Content-Type", "application/json")
@@ -69,16 +77,15 @@ static int setFields(String issueKey, Map fieldsValsMapping) {
     return result.status
 }
 
-static setDueDate(issue, String date) {
+static setDueDate(Map issue, String date) {
     //yyyy-MM-dd
     Unirest.put("/rest/api/2/issue/${issue.key}")
             .header('Content-Type', 'application/json')
             .queryString("notifyUsers", Boolean.FALSE)
             .body([fields:[duedate:date]]).asString()
-
 }
 
-static setOriginalEstimate(issueKey, minutes) {
+static setOriginalEstimate(String issueKey, int minutes) {
     Unirest.put("/rest/api/2/issue/${issueKey}")
             .queryString("overrideScreenSecurity", Boolean.TRUE)
             .queryString("notifyUsers", Boolean.FALSE)
@@ -87,26 +94,27 @@ static setOriginalEstimate(issueKey, minutes) {
             .asString()
 }
 
-static addComment(issue, commentBody) {
+static addComment(Map issue, String commentBody) {
     Unirest.post("/rest/api/2/issue/${issue.key}/comment")
             .header('Content-Type', 'application/json')
             .body([body:commentBody]).asObject(Map)
 }
 
 static int addOptions(String customFieldId, List<String> options) {
-    customFieldId = customFieldId.replace("customfield_", "")
-    options = options.findResults { ["value": it.toString().trim()] }
-    def result = Unirest.post("/rest/api/3/customField/${customFieldId}/option")
+    def customFieldIdReplaced = customFieldId.replace("customfield_", "")
+    def optionsForRest = options.findResults { ["value": it.toString().trim()] }
+    def result = Unirest.post("/rest/api/3/customField/${customFieldIdReplaced}/option")
             .header("Content-Type", "application/json")
-            .body(["options": options]).asString()
+            .body(["options": optionsForRest]).asString()
     return result.status
 }
 
-static List executeSearch(String jqlQuery, int startAt, int maxResults) {
+static def executeSearch(String jqlQuery, int startAt, int maxResults) {
     def searchRequest = Unirest.get("/rest/api/2/search")
             .queryString("jql", jqlQuery)
             .queryString("startAt", startAt)
             .queryString("maxResults", maxResults)
             .asObject(Map)
+    //noinspection GroovyConditional
     searchRequest.status == 200 ? searchRequest.body.issues as List : null
 }
