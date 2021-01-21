@@ -1,4 +1,4 @@
-package jira.scripted_fields
+package jira.scripted_fields.counters
 
 import com.atlassian.jira.component.ComponentAccessor
 
