@@ -2,6 +2,7 @@ package jira.script_console
 
 import com.atlassian.jira.component.ComponentAccessor
 
+// Make Epic Link Field Required Without SR Behaviours
 def fieldLayoutManager = ComponentAccessor.fieldLayoutManager
 
 def projectId = ComponentAccessor.projectManager.getProjectObjByName("Test Epic Link").id
