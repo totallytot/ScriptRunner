@@ -8,6 +8,7 @@ def permissionScheme = permissionsSchemeManager.getSchemeObject(permissionScheme
 
 ComponentAccessor.projectManager.projectObjects.each {
     if (it.name.contains("АРХИВ")) {
+        //Too many PermissionScheme schemes found for Project
         permissionsSchemeManager.removeSchemesFromProject(it)
         permissionsSchemeManager.addSchemeToProject(it, permissionScheme)
     }
