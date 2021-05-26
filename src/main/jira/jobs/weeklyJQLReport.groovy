@@ -4,8 +4,8 @@ import com.atlassian.jira.component.ComponentAccessor
 import com.onresolve.scriptrunner.runner.customisers.PluginModule
 import com.onresolve.scriptrunner.runner.customisers.WithPlugin
 import com.riadalabs.jira.plugins.insight.channel.external.api.facade.ObjectFacade
-import JiraUtilHelper
-import ReportGenerator
+import jira.JiraUtilHelper
+import jira.ReportGenerator
 
 @WithPlugin("com.riadalabs.jira.plugins.insight")
 @PluginModule

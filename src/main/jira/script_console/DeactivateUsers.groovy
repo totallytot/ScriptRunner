@@ -1,3 +1,5 @@
+package jira.script_console
+
 import com.atlassian.crowd.embedded.impl.ImmutableUser
 import com.atlassian.jira.bc.user.UserService
 import com.atlassian.jira.component.ComponentAccessor

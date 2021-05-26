@@ -24,8 +24,8 @@ class JiraUtilHelper {
     }
 
     static String getIssueUrl(String issueKey) {
-        def baseurl = ComponentAccessor.applicationProperties.getString("jira.baseurl")
-        return "${baseurl}/browse/${issueKey}"
+        def baseUrl = ComponentAccessor.applicationProperties.getString("jira.baseurl")
+        return "${baseUrl}/browse/${issueKey}"
     }
 
     static Object getCustomFieldValue(String customFieldName, Issue issue) {
@@ -38,7 +38,7 @@ class JiraUtilHelper {
         def parseResult = searchService.parseQuery(executionUser, jql)
         if (parseResult.valid)
             searchService.search(executionUser, parseResult.query, PagerFilter.unlimitedFilter).results
-        else null
+        else []
     }
 
     static List<Issue> getIssuesInEpic(Issue epic) {
