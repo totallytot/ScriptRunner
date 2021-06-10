@@ -30,7 +30,7 @@ searchResult.each { Issue issue ->
     descVal << issue.description
     descVal << separator
     fieldValMapping.each { k, v ->
-        descVal << k.toString().concat(": ").concat(v as String).concat("\\\\")
+        if (v) descVal << k.toString().concat(": ").concat(v as String).concat("\\\\")
     }
     setDescription(executionUser, issue, descVal as String)
 }
