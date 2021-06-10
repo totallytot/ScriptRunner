@@ -32,17 +32,20 @@ Steps To Reproduce : Run a month end close in the system.
 searchResult.each { Issue issue ->
     def fieldValMapping = CUSTOM_FIELD_NAMES.collectEntries { [it, getCustomFieldValue(it, issue)] }
     def descVal = StringBuilder.newInstance()
-    descVal << issue.description
-    descVal << mainSeparator
-    fieldValMapping.each { k, v ->
-        if (v) {
-            descVal << k.toString().concat(": ").concat(v as String)
-            descVal << fieldSeparator
+    if (issue.description) descVal << issue.description
+    def hasValue = fieldValMapping.values().any { it != null}
+    if (hasValue) {
+        descVal << mainSeparator
+        fieldValMapping.each { k, v ->
+            if (v) {
+                descVal << k.toString().concat(": ").concat(v as String)
+                descVal << fieldSeparator
+            }
         }
+        def result = setDescription(executionUser, issue, descVal as String)
+        log.warn """Working with ${issue.key}"""
+        log.warn """Update result: ${result}"""
     }
-    def result = setDescription(executionUser, issue, descVal as String)
-    log.warn """Working with ${issue.key}"""
-    log.warn """Update result: ${result}"""
 }
 
 static List<Issue> getIssuesFromJql(ApplicationUser executionUser, String jql) {
