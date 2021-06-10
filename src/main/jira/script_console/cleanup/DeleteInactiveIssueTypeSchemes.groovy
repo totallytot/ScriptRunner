@@ -1,4 +1,4 @@
-package jira.script_console
+package jira.script_console.cleanup
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.fields.config.FieldConfigScheme;
