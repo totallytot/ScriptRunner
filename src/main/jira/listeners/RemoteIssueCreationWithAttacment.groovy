@@ -25,20 +25,19 @@ import org.apache.log4j.lf5.util.StreamUtils
  * App link is configured without OAuth without impersonation
  */
 
-@Field final String TARGET_API_URL = "https://jira-tst2.megafon.ru/rest/api/latest"
-// jira-infosec2nx-svc
-@Field final String TARGET_API_TOKEN = "Bearer YTCDXQAYAZ5CYB4URKDZONK36SMTZSSKM5ULLXLYGG7ULCGXQOUPRBKIMOOY4NDEZUTLJ2FITD35NDEMVHDXMF6K57K3STBOJJOM5YBWWZVYZGFPHW6LEDSRWDHDKOOT"
-@Field final String TARGET_PROJECT_KEY = "INFOSEC"
-@Field final String TARGET_ISSUE_TYPE = "Инцидент"
-@Field final String TARGET_ISSUE_LABEL = "Фабрика"
-@Field final String SOURCE_EXECUTION_USERNAME = "mf_bsp_implsec"
-@Field final String SOURCE_APPLICATION_LINK_NAME = "MegaFon JIRA"
+@Field final String TARGET_API_URL = "https://jira.example.com/rest/api/latest"
+@Field final String TARGET_BASIC_AUTH = "Bearer "
+@Field final String TARGET_PROJECT_KEY = "Test"
+@Field final String TARGET_ISSUE_TYPE = "Task"
+@Field final String TARGET_ISSUE_LABEL = "Label"
+@Field final String SOURCE_EXECUTION_USERNAME = "service_user"
+@Field final String SOURCE_APPLICATION_LINK_NAME = "Test JIRA"
 
 def postRequest = { String url, HttpEntity entity ->
     def httpClient = HttpClientBuilder.create().build()
     def httpPost = new HttpPost(url)
     httpPost.with {
-        setHeader("Authorization", TARGET_API_TOKEN)
+        setHeader("Authorization", TARGET_BASIC_AUTH)
         setHeader("X-Atlassian-Token", "nocheck")
         setEntity(entity)
     }
