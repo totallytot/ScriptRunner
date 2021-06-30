@@ -1,6 +1,6 @@
 package jira.conditions
 
-import JiraUtilHelper
+import jira.JiraUtilHelper
 
 def insightCfVal = JiraUtilHelper.getCustomFieldValue("Подразделение", issue) as String
 if (!insightCfVal) return
