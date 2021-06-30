@@ -7,12 +7,14 @@ import com.atlassian.jira.event.type.EventDispatchOption
 import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.user.ApplicationUser
 import com.atlassian.jira.web.bean.PagerFilter
+import groovy.transform.Field
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-final String JQL = "issue in (CFSU-769)"
-final List<String> CUSTOM_FIELD_NAMES = ["Database", "Reproducible"]
+@Field final String JQL = "issue in (CFSU-785)"
+@Field final List<String> CUSTOM_FIELD_NAMES = ["Database", "Reproducible"]
+@Field final List<String> SYSTEM_FIELD_NAMES = ["Environment"]
 
 def executionUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
 def searchResult = getIssuesFromJql(executionUser, JQL)
@@ -26,25 +28,27 @@ ___________________
 """
 def fieldSeparator = """
 Currently - ___________________
-Reason For Chosen Priority: Technical documents are client facing.
-Steps To Reproduce : Run a month end close in the system.
 """
 searchResult.each { Issue issue ->
-    def fieldValMapping = CUSTOM_FIELD_NAMES.collectEntries { [it, getCustomFieldValue(it, issue)] }
-    def descVal = StringBuilder.newInstance()
-    if (issue.description) descVal << issue.description
-    def hasValue = fieldValMapping.values().any { it != null}
-    if (hasValue) {
+    def customFieldValMapping = CUSTOM_FIELD_NAMES.collectEntries { [it, getCustomFieldValue(it, issue)] }
+    def hasCustomFieldValue = customFieldValMapping.values().any { it != null }
+    def systemFieldValMapping = SYSTEM_FIELD_NAMES.collectEntries { [it, getSystemFieldValue(it, issue)] }
+    def hasSystemFieldValue = systemFieldValMapping.values().any { it != null }
+
+    if (hasCustomFieldValue || hasSystemFieldValue) {
+        def descVal = StringBuilder.newInstance()
+        if (issue.description) descVal << issue.description
         descVal << mainSeparator
-        fieldValMapping.each { k, v ->
+        def commonFieldValMapping = customFieldValMapping + systemFieldValMapping
+        commonFieldValMapping.each { k, v ->
             if (v) {
                 descVal << k.toString().concat(": ").concat(v as String)
                 descVal << fieldSeparator
             }
         }
         def result = setDescription(executionUser, issue, descVal as String)
-        log.warn """Working with ${issue.key}"""
-        log.warn """Update result: ${result}"""
+        log.warn "Working with ${issue.key}"
+        log.warn "Update result: ${result}"
     }
 }
 
@@ -54,6 +58,16 @@ static List<Issue> getIssuesFromJql(ApplicationUser executionUser, String jql) {
     if (parseResult.valid)
         searchService.search(executionUser, parseResult.query, PagerFilter.unlimitedFilter).results
     else []
+}
+
+static Object getSystemFieldValue(String systemFieldName, Issue issue) {
+    def value = null
+    switch (systemFieldName.toLowerCase()) {
+        case "environment":
+            value = issue.environment
+            break
+    }
+    return value
 }
 
 static Object getCustomFieldValue(String customFieldName, Issue issue) {
