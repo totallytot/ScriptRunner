@@ -78,7 +78,7 @@ searchResult.each { Issue issue ->
             }
         }
         setDescription(executionUser, issue, descVal as String)
-    } else logger.info "Field values are empty or provided fields are/do not configured/exist"
+    } else logger.info "No field values detected"
 }
 logger.info "SCRIPT END"
 
