@@ -8,18 +8,48 @@ import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.user.ApplicationUser
 import com.atlassian.jira.web.bean.PagerFilter
 import groovy.transform.Field
+import org.apache.log4j.Level
+import org.apache.log4j.Logger
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Field final String JQL = "issue in (CFSU-785)"
-@Field final List<String> CUSTOM_FIELD_NAMES = ["Database", "Reproducible"]
+@Field final String JQL = "issue in (PFTA-110)"
+@Field final List<String> CUSTOM_FIELD_NAMES = ["Car", "External Issue"]
 @Field final List<String> SYSTEM_FIELD_NAMES = ["Environment"]
+
+def logger = Logger.getLogger("FieldAppender")
+logger.setLevel(Level.INFO)
+logger.info "SCRIPT START"
+
+def setDescription = { ApplicationUser executionUser, Issue issue, String value ->
+    logger.info "Starting description update..."
+    def issueService = ComponentAccessor.issueService
+    def issueInputParameters = issueService.newIssueInputParameters()
+    issueInputParameters.with {
+        setSkipScreenCheck(true)
+        setDescription(value)
+    }
+    IssueService.UpdateValidationResult validationResult = issueService
+            .validateUpdate(executionUser, issue.id, issueInputParameters)
+    if (!validationResult.valid) {
+        logger.error "Issue update validation result is not valid: ${validationResult.errorCollection}"
+        return
+    }
+    def updateResult = issueService.update(executionUser, validationResult, EventDispatchOption.DO_NOT_DISPATCH, false)
+    if (!updateResult.valid) {
+        logger.error "Issue update result is not valid: ${updateResult.errorCollection}"
+        return
+    }
+    logger.info "Description has been updated"
+}
 
 def executionUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
 def searchResult = getIssuesFromJql(executionUser, JQL)
-
-if (searchResult.empty) return
+if (searchResult.empty) {
+    logger.error "JQL search result is empty - SCRIPT STOPPED"
+    return
+}
 def format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 def mainSeparator = """
 ___________________
@@ -30,12 +60,13 @@ def fieldSeparator = """
 Currently - ___________________
 """
 searchResult.each { Issue issue ->
+    logger.info "Working with ${issue.key}"
     def customFieldValMapping = CUSTOM_FIELD_NAMES.collectEntries { [it, getCustomFieldValue(it, issue)] }
     def hasCustomFieldValue = customFieldValMapping.values().any { it != null }
     def systemFieldValMapping = SYSTEM_FIELD_NAMES.collectEntries { [it, getSystemFieldValue(it, issue)] }
     def hasSystemFieldValue = systemFieldValMapping.values().any { it != null }
-
     if (hasCustomFieldValue || hasSystemFieldValue) {
+        logger.info "Field values are not empty"
         def descVal = StringBuilder.newInstance()
         if (issue.description) descVal << issue.description
         descVal << mainSeparator
@@ -46,11 +77,10 @@ searchResult.each { Issue issue ->
                 descVal << fieldSeparator
             }
         }
-        def result = setDescription(executionUser, issue, descVal as String)
-        log.warn "Working with ${issue.key}"
-        log.warn "Update result: ${result}"
-    }
+        setDescription(executionUser, issue, descVal as String)
+    } else logger.info "Field values are empty or provided fields are/do not configured/exist"
 }
+logger.info "SCRIPT END"
 
 static List<Issue> getIssuesFromJql(ApplicationUser executionUser, String jql) {
     def searchService = ComponentAccessor.getComponentOfType(SearchService)
@@ -73,17 +103,4 @@ static Object getSystemFieldValue(String systemFieldName, Issue issue) {
 static Object getCustomFieldValue(String customFieldName, Issue issue) {
     ComponentAccessor.customFieldManager.getCustomFieldObjects(issue)
             .find { it.name == customFieldName }?.getValue(issue)
-}
-
-static def setDescription(ApplicationUser executionUser, Issue issue, String value) {
-    def issueService = ComponentAccessor.issueService
-    def issueInputParameters = issueService.newIssueInputParameters()
-    issueInputParameters.with {
-        setSkipScreenCheck(true)
-        setDescription(value)
-    }
-    IssueService.UpdateValidationResult validationResult = issueService
-            .validateUpdate(executionUser, issue.id, issueInputParameters)
-    if (validationResult.valid) issueService.update(executionUser, validationResult, EventDispatchOption.DO_NOT_DISPATCH, false)
-    else validationResult.errorCollection
 }
