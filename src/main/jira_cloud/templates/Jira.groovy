@@ -115,12 +115,12 @@ static int addOptions(String customFieldId, List<String> options) {
     return result.status
 }
 
-static def executeSearch(String jqlQuery, int startAt, int maxResults) {
+static List executeSearch(String jqlQuery, int startAt, int maxResults) {
     def searchRequest = Unirest.get("/rest/api/3/search")
             .queryString("jql", jqlQuery)
             .queryString("startAt", startAt)
             .queryString("maxResults", maxResults)
             .asObject(Map)
     //noinspection GroovyConditional
-    searchRequest.status == 200 ? searchRequest.body.issues as List : null
+    searchRequest.status == 200 ? searchRequest.body.issues as List<Map> : []
 }

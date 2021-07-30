@@ -1,15 +1,8 @@
 package jira_cloud.scheduled_jobs
 
 import kong.unirest.Unirest
-import java.text.NumberFormat
 
-//def requestFields = Unirest.get("/rest/api/2/field").asObject(List)
-//assert requestFields.status == 200
-//def customFields = requestFields.body.findAll { (it as Map).custom } as List<Map>
-//def calcRankId = customFields.find { it.name == "Calculated Rank" }?.id
-//assert calcRankId != null
-//def requestCountId = customFields.find { it.name == "Requests Count" }?.id
-//assert requestCountId != null
+import java.text.NumberFormat
 
 logger.info "### Calculated Rank Scheduled Job Started ###"
 def calculatedRankCfId = "customfield_12727"
@@ -34,7 +27,7 @@ searchResult.each { item ->
     def votes = issue.fields.votes.votes as Integer
     if (!votes) votes = 0
     def requestCountVal = issue.fields["${requestCountCfId}"] as Double
-    if (!requestCountVal) requestCountVal= 0
+    if (!requestCountVal) requestCountVal = 0
     def calculatedRankVal = (requestCountVal * 0.4 + votes * 0.6) as Double
     logger.info "Actual calculatedRank value is ${calculatedRankVal}"
 
