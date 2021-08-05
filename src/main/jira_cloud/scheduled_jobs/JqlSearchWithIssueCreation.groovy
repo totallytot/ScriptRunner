@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 final String PROJECT_KEY = "TESTONB"
 final String ISSUE_TYPE_NAME = "Story"
 final String JQL = """project = ${PROJECT_KEY} and issuetype = ${ISSUE_TYPE_NAME} and "Trigger Date[Time stamp]" is not empty"""
-final int BASIC_CREATION_PERIOD_HOURS = 1
+final int BASIC_CREATION_PERIOD_HOURS = 23 // should be less than 24 or add days val
 final int ADDITIONAL_CREATION_PERIOD_HOURS = 1
 final String TRIGGER_LABEL = "SCC"
 
@@ -50,11 +50,10 @@ searchResult.each { Map issue ->
     def formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")
     def triggerDate = formatter.parse(issue.fields[TRIGGER_DATE_ID] as String)
     def currentDate = new Date()
-    int deltaHours = 0
-    use(TimeCategory) {
-        def duration = currentDate - triggerDate
-        deltaHours = duration.hours
-    }
+    def difference = currentDate.time - triggerDate.time
+    def deltaHours = Math.round(difference/3600000)
+    logger.info "deltaHours: ${deltaHours}"
+
     def summary = issue.fields.summary
     def assigneeId = issue.fields.assignee?.accountId as String
 
