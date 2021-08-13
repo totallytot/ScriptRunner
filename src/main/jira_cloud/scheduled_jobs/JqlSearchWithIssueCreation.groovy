@@ -1,6 +1,5 @@
 package jira_cloud.scheduled_jobs
 
-import groovy.time.TimeCategory
 import groovy.transform.Field
 import kong.unirest.Unirest
 
