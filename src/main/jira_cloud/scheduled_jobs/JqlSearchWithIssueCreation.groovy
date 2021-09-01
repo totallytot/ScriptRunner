@@ -1,16 +1,16 @@
 package jira_cloud.scheduled_jobs
 
-import groovy.transform.Field
 import kong.unirest.Unirest
+import groovy.transform.Field
 
 import java.text.SimpleDateFormat
 
 @Field final String TRIGGER_DATE_ID = "customfield_12135"
-final String PROJECT_KEY = "TESTONB"
+final String PROJECT_KEY = "ONB"
 final String ISSUE_TYPE_NAME = "Story"
 final String JQL = """project = ${PROJECT_KEY} and issuetype = ${ISSUE_TYPE_NAME} and "Trigger Date[Time stamp]" is not empty"""
-final int BASIC_CREATION_PERIOD_HOURS = 23 // should be less than 24 or add days val
-final int ADDITIONAL_CREATION_PERIOD_HOURS = 1
+final int BASIC_CREATION_PERIOD_HOURS = 24
+final int ADDITIONAL_CREATION_PERIOD_HOURS = 4
 final String TRIGGER_LABEL = "SCC"
 
 logger.info "Scheduled job start"
@@ -50,7 +50,7 @@ searchResult.each { Map issue ->
     def triggerDate = formatter.parse(issue.fields[TRIGGER_DATE_ID] as String)
     def currentDate = new Date()
     def difference = currentDate.time - triggerDate.time
-    def deltaHours = Math.round(difference/3600000)
+    def deltaHours = Math.round(difference / 3600000)
     logger.info "deltaHours: ${deltaHours}"
 
     def summary = issue.fields.summary
@@ -66,100 +66,50 @@ searchResult.each { Map issue ->
         def hasTriggerLabel = issue.fields.labels.any { it == TRIGGER_LABEL }
         if (hasTriggerLabel && assigneeId) {
             def day2Desc = """
-{
-  "version": 1,
-  "type": "doc",
-  "content": [
-    {
-      "type": "paragraph",
-      "content": [
         {
-          "type": "text",
-          "text": "You have made it through day 1! Today we will be introducing you to some of our technical software, how to set it up and how to use it. Please start this day with the Install Git for Windows, Sourcetree, and Sublime so you can find and hopefully solve any access issues before your session with "
-        },
-        {
-          "type": "mention",
-          "attrs": {
-            "id": "5a72ebef3df3a02be346090a",
-            "text": "Francisco Moreno",
-            "accessLevel": ""
-          }
-        },
-        {
-          "type": "text",
-          "text": " in the afternoon."
-        },
-        {
-          "type": "hardBreak"
-        },
-        {
-          "type": "hardBreak"
-        },
-        {
-          "type": "text",
-          "text": "We’ve also thrown in some organizational tools like Glassfrog, Cezanne and 7Geese, but the courses will cover all of these."
+            "version": 1,
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "You have made it through Day 1! Today we will be introducing you to some of our technical software, how to set it up and how to use it. Please start today with the "
+                        },
+                        {
+                            "type": "text",
+                            "text": "Install Important Programs",
+                            "marks": [
+                                {
+                                    "type": "strong"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": " task, so you can find and hopefully solve any access issues before your session on how to use them. "
+                        },
+                        {
+                            "type": "hardBreak"
+                        },
+                        {
+                            "type": "hardBreak"
+                        },
+                        {
+                            "type": "text",
+                            "text": "We’ve also thrown in some organizational tools like Glassfrog, Cezanne and 7Geese, but the courses will cover all of these. Have fun! "
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
-}
 """
             def parentIssueKey = executeBasicScheduledActions(issue.key as String, day2Summary, day2Desc, assigneeId, Boolean.TRUE)
             if (parentIssueKey) {
                 def summaryDescriptionMapping = [:]
-                def sb1Sum = "Content General Knowledge course"
+                def sb1Sum = "Install Important Programs"
                 def sb1Desc = """
-{
-  "version": 1,
-  "type": "doc",
-  "content": [
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "All courses can be found in the"
-        },
-        {
-          "type": "text",
-          "text": " Labster Hub, via Your Learning Dashboard. ",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://labster.atlassian.net/wiki/plugins/servlet/ac/com.stiltsoft.confluence.quiz/learning#!participant-dashboard"
-              }
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": "This course is the second part of the "
-        },
-        {
-          "type": "text",
-          "text": "Content Circle course",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://quizzes.stiltsoft.net/course?token=gQUbUwFkCQ9WzCIXhuHK8fdY6Rhp6au3Zd9hYnZTbQN_vZ8jXm9vcmOodPeJTKTo"
-              }
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": " you started yesterday. "
-        }
-      ]
-    }
-  ]
-}
-"""
-                summaryDescriptionMapping.put(sb1Sum, sb1Desc)
-                def sb2Sum = "Install Git for Windows, Sourcetree, Sublime"
-                def sb2Desc = """
 {
   "version": 1,
   "type": "doc",
@@ -251,6 +201,57 @@ searchResult.each { Map issue ->
               ]
             }
           ]
+        }
+      ]
+    }
+  ]
+}
+"""
+                summaryDescriptionMapping.put(sb1Sum, sb1Desc)
+                def sb2Sum = "Content General Knowledge course"
+                def sb2Desc = """
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "All courses can be found in the"
+        },
+        {
+          "type": "text",
+          "text": " Labster Hub, via Your Learning Dashboard. ",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://labster.atlassian.net/wiki/plugins/servlet/ac/com.stiltsoft.confluence.quiz/learning#!participant-dashboard"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "This course is the second part of the "
+        },
+        {
+          "type": "text",
+          "text": "Content Circle course",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://quizzes.stiltsoft.net/course?token=gQUbUwFkCQ9WzCIXhuHK8fdY6Rhp6au3Zd9hYnZTbQN_vZ8jXm9vcmOodPeJTKTo"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " you started yesterday. "
         }
       ]
     }
@@ -403,141 +404,80 @@ searchResult.each { Map issue ->
 }
 """
                 summaryDescriptionMapping.put(sb4Sum, sb4Desc)
-                def sb5Sum = "Access and tools check"
-                def sb5Desc = """
-{
-  "version": 1,
-  "type": "doc",
-  "content": [
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "In addition to Google, please make sure that you have downloaded and have access to:"
+                def sb5Sum = "Other Useful Programs"
+                def sb5Desc = """ 
+ {
+            "version": 1,
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "In addition to Sublime and Sourcetree you may find these tools useful: "
+                        }
+                    ]
+                },
+                {
+                    "type": "bulletList",
+                    "content": [
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "Grammarly",
+                                            "marks": [
+                                                {
+                                                    "type": "link",
+                                                    "attrs": {
+                                                        "href": "https://download-editor.grammarly.com/windows/GrammarlySetup.exe"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": " or add the Chrome extension → Grammar checker"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "Loom",
+                                            "marks": [
+                                                {
+                                                    "type": "link",
+                                                    "attrs": {
+                                                        "href": "https://cdn.loom.com/desktop-packages/Loom%20Setup%200.57.0.exe"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": " → Create screencasts (very useful to explain issues/problems)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "type": "bulletList",
-      "content": [
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Sublime",
-                  "marks": [
-                    {
-                      "type": "link",
-                      "attrs": {
-                        "href": "https://download.sublimetext.com/Sublime%20Text%20Build%203211%20x64%20Setup.exe"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "type": "text",
-                  "text": " → XML editor"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "SourceTree",
-                  "marks": [
-                    {
-                      "type": "link",
-                      "attrs": {
-                        "href": "https://product-downloads.atlassian.com/software/sourcetree/windows/ga/SourceTreeSetup-3.3.9.exe"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "type": "text",
-                  "text": " → Get access to our repositories"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Grammarly",
-                  "marks": [
-                    {
-                      "type": "link",
-                      "attrs": {
-                        "href": "https://download-editor.grammarly.com/windows/GrammarlySetup.exe"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "type": "text",
-                  "text": " or add the Chrome extension → Grammar checker"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Loom",
-                  "marks": [
-                    {
-                      "type": "link",
-                      "attrs": {
-                        "href": "https://cdn.loom.com/desktop-packages/Loom%20Setup%200.57.0.exe"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "type": "text",
-                  "text": " → Create screencasts"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "You will cover Sublime and Sourcetree in the session with Fran today. Grammarly and Loom are pretty intuitive."
-        }
-      ]
-    }
-  ]
-}
 """
                 summaryDescriptionMapping.put(sb5Sum, sb5Desc)
                 def sb6Sum = "Finish All On-Board course"
@@ -621,7 +561,7 @@ searchResult.each { Map issue ->
       "content": [
         {
           "type": "text",
-          "text": "You know the drill by now! Tasks for day 3, you will be learning to use the Builder, finding out what Content Squads do, and start getting to know Jira. Today you will also be joining our regular TAC meeting."
+          "text": "You know the drill by now! Tasks for Day 3, you will be exploring how to use the Builder - a tool scientific content creators use to create simulations and learning how the Simulation Development Process Works at Labster."
         }
       ]
     }
@@ -642,7 +582,7 @@ searchResult.each { Map issue ->
       "content": [
         {
           "type": "text",
-          "text": "You know the drill by now! Tasks for day 3, you will be learning to use the Builder, finding out what Content Squads do, and start getting to know Jira. Today you will also be joining our regular TAC meeting."
+          "text": "In this meeting with Bob the Builder themself, you will learn all all about how to use this mysterious tool we have all been talking about. Check your Google Calendar for the invite."
         }
       ]
     }
@@ -670,7 +610,39 @@ searchResult.each { Map issue ->
 """
                 summaryDescriptionMapping.put(sb2Sum, sb2Desc)
                 def sb3Sum = "Simulation Development Workflow Course"
-                def sb3Desc = null
+                def sb3Desc = """
+{
+            "version": 1,
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Get started on the Simulation Development Workflow Course in the "
+                        },
+                        {
+                            "type": "text",
+                            "text": "Labster Hub",
+                            "marks": [
+                                {
+                                    "type": "link",
+                                    "attrs": {
+                                        "href": "https://labster.atlassian.net/wiki/plugins/servlet/ac/com.stiltsoft.confluence.quiz/learning#!participant-dashboard"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": ", have no fear if you don’t get the chance to finish this, there will be plenty of time to revist over the next week."
+                        }
+                    ]
+                }
+            ]
+        }
+"""
                 summaryDescriptionMapping.put(sb3Sum, sb3Desc)
                 def sb4Sum = "Introduce yourself in #welcome-aboard"
                 def sb4Desc = """

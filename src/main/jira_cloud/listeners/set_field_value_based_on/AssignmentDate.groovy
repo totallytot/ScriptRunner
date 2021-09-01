@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 final String TRIGGER_DATE_ID = "customfield_12135"
 final String TRIGGER_LABEL = "SCC"
 final String TRIGGER_ISSUE_TYPE = "Story"
+final String PROJECT_KEY = "ONB"
 
 logger.info "Working with ${issue.key}"
 def isStory = issue.fields.issuetype.name == TRIGGER_ISSUE_TYPE
@@ -28,311 +29,343 @@ else
     logger.info "Trigger date was set to ${triggerDateVal} in ${issue.key}"
 def desc = """
 {
-  "version": 1,
-  "type": "doc",
-  "content": [
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "Over the course of your first week play 5 of the simulations listed below. You can access our SIM catalouge using "
-        },
-        {
-          "type": "text",
-          "text": "this link ",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://api2.labster.com/"
-              }
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": "click on the "
-        },
-        {
-          "type": "text",
-          "text": "Filter ",
-          "marks": [
-            {
-              "type": "strong"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": "button to search for sims using the three letter code, or keywords. "
+            "version": 1,
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Over the course of your first week play 5 simulations, some suggestions are listed below. You can access our SIM catalogue using "
+                        },
+                        {
+                            "type": "text",
+                            "text": "this link ",
+                            "marks": [
+                                {
+                                    "type": "link",
+                                    "attrs": {
+                                        "href": "https://api2.labster.com/"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": "click on the "
+                        },
+                        {
+                            "type": "text",
+                            "text": "Filter ",
+                            "marks": [
+                                {
+                                    "type": "strong"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": "button to search for sims using the three letter code, or keywords. Alternatively, you can search for topics with the "
+                        },
+                        {
+                            "type": "text",
+                            "text": "Filter",
+                            "marks": [
+                                {
+                                    "type": "strong"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": " button, and play any simulation that takes your fancy. "
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Make sure to play at least 1 in accessibility mode before your Accessibility at Labster session. In this mode, alt text is read out for images and visual tasks and you can use the keyboard to navigate. You can play any simulation that has been made accessible (marked * ) in accessibility mode by adding "
+                        },
+                        {
+                            "type": "text",
+                            "text": "?accessibility=true",
+                            "marks": [
+                                {
+                                    "type": "code"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": " to the end of the standard URL (see "
+                        },
+                        {
+                            "type": "text",
+                            "text": "STEP ONE",
+                            "marks": [
+                                {
+                                    "type": "strong"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": " on "
+                        },
+                        {
+                            "type": "text",
+                            "text": "this page",
+                            "marks": [
+                                {
+                                    "type": "link",
+                                    "attrs": {
+                                        "href": "https://labster.atlassian.net/wiki/spaces/SD/pages/1430782113/Accessibility+Workflow+from+Scientific+Content+Creator+SCC+Perspective"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": "). "
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Under Simulation Excellence you will find simulations that have recently been split up into short "
+                        },
+                        {
+                            "type": "text",
+                            "text": "Mini",
+                            "marks": [
+                                {
+                                    "type": "code"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "text": " simulations and updated. Compare the two. "
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Recent simulations"
+                        }
+                    ]
+                },
+                {
+                    "type": "orderedList",
+                    "content": [
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "CRY - Recrystallization: Purify your solid"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "GMP - Aseptic Technique: Culture your sample without contamination*"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "BAS - Bacterial Cell Structures: An introduction to the bacterial cell*"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "TLC - Thin Layer Chromatography*"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "EVA - Evolution: Founding theories and principles*"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "ETS - Biomes: Identify and create the main biomes on Earth"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "ELE - Basic Electricity: Understand how electricity works"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "COC - Organic Chemistry Introduction: Learn about organic compounds"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "LVL - Trophic Levels: Grazer vs. predator"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "HST - Homeostatic Control: How does the human body keep itself in balance?"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Simulation Excellence "
+                        }
+                    ]
+                },
+                {
+                    "type": "orderedList",
+                    "content": [
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "Compare FER - Fermentation, with FEM - Fermentation: Optimize bio-ethanol production"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "listItem",
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [
+                                        {
+                                            "type": "text",
+                                            "text": "Compare MIC - Microscopy, with BLM - Basic Light microscopy"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "Make sure to play at least 1 in accessibility mode before Thursday. In this mode, alt text is read out for images and visual tasks and you can use the keyboard to navigate. You can play any simulation that has been made accessible (marked * ) in accessibility mode by adding "
-        },
-        {
-          "type": "text",
-          "text": "?accessibility=true",
-          "marks": [
-            {
-              "type": "code"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": " to the end of the standard URL (see STEP ONE on "
-        },
-        {
-          "type": "text",
-          "text": "this page",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://labster.atlassian.net/wiki/spaces/SD/pages/1430782113/Accessibility+Workflow+from+Scientific+Content+Creator+SCC+Perspective"
-              }
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": "). "
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "Under Simulation Excellence you will find simulations that have recently been split up into short "
-        },
-        {
-          "type": "text",
-          "text": "Mini",
-          "marks": [
-            {
-              "type": "code"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": " simulations and updated. Compare the two to "
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "Recent simulations"
-        }
-      ]
-    },
-    {
-      "type": "orderedList",
-      "content": [
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "CRY - Recrystallization: Purify your solid"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "GMP - Aseptic Technique: Culture your sample without contamination*"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "BAS - Bacterial Cell Structures: An introduction to the bacterial cell*"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "TLC - Thin Layer Chromatography"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "EVA - Evolution: Founding theories and principles*"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "ETS - Biomes: Identify and create the main biomes on Earth"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "ELE - Basic Electricity: Understand how electricity works"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "COC - Organic Chemistry Introduction: Learn about organic compounds"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "LVL - Trophic Levels: Grazer vs. predator"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "HST - Homeostatic Control: How does the human body keep itself in balance?"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "content": [
-        {
-          "type": "text",
-          "text": "Simulation Excellence "
-        }
-      ]
-    },
-    {
-      "type": "orderedList",
-      "content": [
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Compare FER - Fermentation with FEM - Fermentation: Optimize bio-ethanol production"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "listItem",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Compare MIC - Microscopy with BLM - Basic Light microscopy"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
 """
-def issueCreationReq = createIssue("TESTONB", "Story", "Play 5 simulations", desc, issue.fields.assignee.accountId as String)
+def issueCreationReq = createIssue(PROJECT_KEY, TRIGGER_ISSUE_TYPE, "Play 5 simulations", desc, issue.fields.assignee.accountId as String)
 if (issueCreationReq.status != 201)
     logger.error "Error during issue creation request: ${issueCreationReq.status}: ${issueCreationReq.body}"
-else
-    logger.info "Created issue: ${issueCreationReq.body.key}"
+else {
+    def createdIssueKey = issueCreationReq.body.key
+    logger.info "Created issue: ${createdIssueKey}"
+    def linkIssuesReq = linkIssues(issue.key as String, createdIssueKey as String, "Relates")
+    if (linkIssuesReq.status == 201) logger.info "Issues were linked"
+    else logger.error "Error during during issue linking ${linkIssuesReq.status} ${linkIssuesReq.body}"
+}
+
 
 static def setField(String issueKey, String customfieldId, String value) {
     Unirest.put("/rest/api/3/issue/${issueKey}")
@@ -366,4 +399,14 @@ static def createIssue(String projectKey, String issueTypeName, String summary, 
     Unirest.post("/rest/api/3/issue")
             .header("Content-Type", "application/json")
             .body(body).asObject(Map)
+}
+
+static def linkIssues(String sourceIssueKey, String targetIssueKey, String linkType) {
+    Unirest.post('/rest/api/3/issueLink')
+            .header('Content-Type', 'application/json')
+            .body([type        : [name: linkType],
+                   outwardIssue: [key: sourceIssueKey],
+                   inwardIssue : [key: targetIssueKey]
+            ])
+            .asString()
 }
