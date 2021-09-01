@@ -6,12 +6,11 @@ import groovy.transform.Field
 import java.text.SimpleDateFormat
 
 @Field final String TRIGGER_DATE_ID = "customfield_12135"
-final String PROJECT_KEY = "ONB"
+final String PROJECT_KEY = "TESTONB"
 final String ISSUE_TYPE_NAME = "Story"
 final String JQL = """project = ${PROJECT_KEY} and issuetype = ${ISSUE_TYPE_NAME} and "Trigger Date[Time stamp]" is not empty"""
 final int BASIC_CREATION_PERIOD_HOURS = 24
 final int ADDITIONAL_CREATION_PERIOD_HOURS = 4
-final String TRIGGER_LABEL = "SCC"
 
 logger.info "Scheduled job start"
 def searchResult = executeSearch(JQL, 0, 100) as List
@@ -56,6 +55,7 @@ searchResult.each { Map issue ->
     def summary = issue.fields.summary
     def assigneeId = issue.fields.assignee?.accountId as String
 
+    def day1Summary = "Day 1 - Getting set up"
     def day2Summary = "Day 2 - Technical software"
     def day3Summary = "Day 3 - Builder time"
     def day4Summary = "Day 4 - Accessibility & Writing"
@@ -63,8 +63,7 @@ searchResult.each { Map issue ->
     def week2Summary = "Week 2 - Simulation quality and general good practice"
 
     if (deltaHours >= BASIC_CREATION_PERIOD_HOURS) {
-        def hasTriggerLabel = issue.fields.labels.any { it == TRIGGER_LABEL }
-        if (hasTriggerLabel && assigneeId) {
+        if (summary == day1Summary && assigneeId) {
             def day2Desc = """
         {
             "version": 1,
