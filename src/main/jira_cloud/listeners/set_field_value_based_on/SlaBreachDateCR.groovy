@@ -92,7 +92,7 @@ static Map generateFieldValuesBasedOnSlaBreachTime(String issueKey) {
     if (result.status == 200) {
         def actualSLAs = result.body.values.findAll { it.name in CrSlaFieldMapping.values().collect { it.slaName } }
         actualSLAs.collectEntries {
-            [CrSlaFieldMapping.getFieldIdBySlaName(it.name as String), it.ongoingCycle?.breachTime?.jira]
+            [SlaFieldMapping.getFieldIdBySlaName(it.name as String), it.ongoingCycle?.breachTime?.jira]
         }
     } else null
 }

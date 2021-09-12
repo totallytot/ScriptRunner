@@ -5,17 +5,16 @@ import kong.unirest.Unirest
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-enum LawSlaFieldMapping {
-    LAW_7("LAW 7d", 7, "customfield_11672", "law_target_7"),
-    LAW_15("LAW 15d", 15, "customfield_11673", "law_target_15"),
-    LAW_25("LAW 25d", 25, "customfield_11674", "law_target_25")
+enum SlaFieldMapping {
+    SLA_3("CR 3d", 3, "customfield_11676", "CR_target_3"),
+    SLA_7("CR 7d", 7, "customfield_11677", "CR_target_7"),
 
     final String slaName
     final int days
     final String fieldId
     final String fieldName // just for info
 
-    LawSlaFieldMapping(String slaName, int days, String fieldId, String fieldName) {
+    SlaFieldMapping(String slaName, int days, String fieldId, String fieldName) {
         this.slaName = slaName
         this.fieldId = fieldId
         this.fieldName = fieldName
@@ -33,9 +32,9 @@ enum LawSlaFieldMapping {
 
 final String LAW_DATE_FIELD_ID = "customfield_11645" // law_date
 final String LAW_DUE_DATE_FIELD_ID = "customfield_11646" // law_due_date
-final String TRIGGER_ISSUE_TYPE_ID = "10000" // Law
+final String TRIGGER_ISSUE_TYPE_ID = "10004" // CR
 
-logger.info "LAW ISSUE TYPE LISTENER START"
+logger.info "SLA BREACH DATE LISTENER START"
 
 logger.info "Working with ${issue.key}"
 def isAllowedIssueType = issue.fields.issuetype.id == TRIGGER_ISSUE_TYPE_ID
@@ -72,7 +71,7 @@ logger.info "selectedDate: ${selectedDate}"
 def fieldValuesMapping = [:]
 if (selectedDate) fieldValuesMapping = breachTimeValues.collectEntries { customfieldId, value ->
         if (!value) {
-            def daysToAdd = LawSlaFieldMapping.getDaysByFieldId(customfieldId as String)
+            def daysToAdd = SlaFieldMapping.getDaysByFieldId(customfieldId as String)
             logger.info "daysToAdd: ${daysToAdd}"
             value = addDaysSkippingWeekends(selectedDate, daysToAdd)
             logger.info "Generated: ${customfieldId}: ${value}"
@@ -84,16 +83,16 @@ logger.info "fieldValuesMapping ${fieldValuesMapping}"
 
 def result = setFields(issue.key as String, fieldValuesMapping)
 if (result.status != 204) logger.error "Error during fields update: ${result.status} ${result.body}"
-logger.info "LAW ISSUE TYPE LISTENER END"
+logger.info "SLA BREACH DATE LISTENER END"
 
 static Map generateFieldValuesBasedOnSlaBreachTime(String issueKey) {
     def result = Unirest.get("/rest/servicedeskapi/request/${issueKey}/sla")
             .header("Content-Type", "application/json")
             .asObject(Map)
     if (result.status == 200) {
-        def actualSLAs = result.body.values.findAll { it.name in LawSlaFieldMapping.values().collect { it.slaName } }
+        def actualSLAs = result.body.values.findAll { it.name in SlaFieldMapping.values().collect { it.slaName } }
         actualSLAs.collectEntries {
-            [LawSlaFieldMapping.getFieldIdBySlaName(it.name as String), it.ongoingCycle?.breachTime?.jira]
+            [SlaFieldMapping.getFieldIdBySlaName(it.name as String), it.ongoingCycle?.breachTime?.jira]
         }
     } else null
 }
